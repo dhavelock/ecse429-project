@@ -86,9 +86,9 @@ def test_get_non_empty_response():
 
 def test_get_non_empty_response_xml():
 
-    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
-
     # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
+    
     todo1 = {
         'title': 'Task title 1',
         'doneStatus': False,
