@@ -13,7 +13,6 @@ def setup_function(function):
 def teardown_function(function):
     pass
 
-# Undocumented / Unexpected (should return 405)
 def test_get_project_id_categories_id_not_allowed():
 
     # Given
@@ -44,7 +43,7 @@ def test_get_project_id_categories_id_not_allowed():
     
     # Then
     print_response(res)
-    assert res.status_code == 404
+    assert res.status_code == 405
 
 def test_put_project_id_categories_id_not_allowed():
 
@@ -74,7 +73,6 @@ def test_put_project_id_categories_id_not_allowed():
     print_response(res)
     assert res.status_code == 405
 
-# Undocumented / Unexpected (should return 405)
 def test_post_project_id_categories_id_not_allowed():
 
     # Given
@@ -101,7 +99,7 @@ def test_post_project_id_categories_id_not_allowed():
 
     # Then
     print_response(res)
-    assert res.status_code == 404
+    assert res.status_code == 405
 
 def test_delete_project_id_categories_id_allowed():
 
@@ -302,7 +300,6 @@ def test_project_id_categories_id_options_OK():
     print_response(res)
     assert res.status_code == 200
 
-# Undocumented / Unexpected (should return 405)
 def test_project_id_categories_id_head_not_allowed():
 
     # Given
@@ -315,7 +312,7 @@ def test_project_id_categories_id_head_not_allowed():
 
     # Then
     print_response(res)
-    assert res.status_code == 404
+    assert res.status_code == 405
 
 def test_project_id_categories_id_patch_not_allowed():
 
