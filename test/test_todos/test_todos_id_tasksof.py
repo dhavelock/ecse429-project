@@ -5,6 +5,7 @@ from test.common.helper import reset_system, create_todo, create_project, print_
 import xml.dom.minidom
 
 base_url = 'http://localhost:4567/todos/'
+projects_url = 'http://localhost:4567/projects/'
 
 def url(id):
     return base_url + str(id) + '/tasksof'
@@ -159,11 +160,18 @@ def test_post_todos_projects():
 
     assert res.status_code == 201
 
-    # Fetch todo to assert tasksof relationship was created
+    # Fetch todo and project to assert tasksof relationship was created
     updated_todo = requests.get(base_url + todo_id, headers=headers)
     updated_todo_body = updated_todo.json()
+    print_response(updated_todo)
 
     assert updated_todo_body['todos'][0]['tasksof'][0]['id'] == project_id
+
+    updated_project = requests.get(projects_url + project_id, headers=headers)
+    updated_project_body = updated_project.json()
+    print_response(updated_project)
+
+    assert updated_project_body['projects'][0]['tasks'][0]['id'] == todo_id
 
 def test_post_todos_projects_invalid_body():
 

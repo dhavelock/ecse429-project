@@ -5,6 +5,7 @@ from test.common.helper import reset_system, create_todo, create_category, print
 import xml.dom.minidom
 
 base_url = 'http://localhost:4567/todos/'
+category_url = 'http://localhost:4567/categories/'
 
 def url(id):
     return base_url + str(id) + '/categories'
@@ -150,11 +151,22 @@ def test_post_todos_categories():
 
     assert res.status_code == 201
 
-    # Fetch todo to assert that the catgeory relationship was created
+    # Fetch todo and category to assert that the catgeory relationship was created
     updated_todo = requests.get(base_url + todo_id, headers=headers)
     updated_todo_body = updated_todo.json()
 
+    print('Todo:')
+    print_response(updated_todo)
+
     assert updated_todo_body['todos'][0]['categories'][0]['id'] == category_id
+
+    updated_category = requests.get(category_url + category_id, headers=headers)
+    updated_category_body = updated_category.json()
+
+    print('Category:')
+    print_response(updated_category)
+
+    assert updated_category_body['categories'][0]['todos'][0]['id'] == category_id
 
 def test_post_todos_categories_invalid_body():
 

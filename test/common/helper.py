@@ -22,6 +22,16 @@ def create_project(body, headers={'Content-Type': 'application/json'}):
     res = requests.post(base_url + 'projects', headers=headers, data=json.dumps(body))
     return res.json()
 
+def create_todo_category_relation(todo_id, category_id):
+    headers={'Content-Type': 'application/json'}
+    requests.post(base_url + 'todos/' + str(todo_id) + '/categories', headers=headers, data=json.dumps({ 'id': category_id }))
+    requests.post(base_url + 'categories/' + str(category_id) + '/todos', headers=headers, data=json.dumps({ 'id': todo_id }))
+
+def create_todo_project_relation(todo_id, project_id):
+    headers={'Content-Type': 'application/json'}
+    requests.post(base_url + 'todos/' + str(todo_id) + '/tasksof', headers=headers, data=json.dumps({ 'id': project_id }))
+    requests.post(base_url + 'projects/' + str(project_id) + '/tasks', headers=headers, data=json.dumps({ 'id': todo_id }))
+
 def print_response(response):
     print('Status Code:', response.status_code)
 
