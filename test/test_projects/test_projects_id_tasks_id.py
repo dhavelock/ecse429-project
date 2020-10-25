@@ -13,6 +13,7 @@ def setup_function(function):
 def teardown_function(function):
     pass
 
+# Undocumented / Unexpected (should return 405)
 def test_get_project_id_tasks_id_not_allowed():
 
     # Given
@@ -29,7 +30,12 @@ def test_get_project_id_tasks_id_not_allowed():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
@@ -38,7 +44,6 @@ def test_get_project_id_tasks_id_not_allowed():
     res = requests.get(url + project_id + '/tasks/' + todo_id, headers=headers)
     
     # Then
-    #THIS DOESNT FOLLOW THE DOCUMENTATION - A PROBLEM
     print_response(res)
     assert res.status_code == 404
 
@@ -58,7 +63,12 @@ def test_put_project_id_tasks_id_not_allowed():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
@@ -70,6 +80,7 @@ def test_put_project_id_tasks_id_not_allowed():
     print_response(res)
     assert res.status_code == 405
 
+# Undocumented / Unexpected (should return 405)
 def test_post_project_id_tasks_id_not_allowed():
 
     # Given
@@ -95,10 +106,8 @@ def test_post_project_id_tasks_id_not_allowed():
     res = requests.post(url + project_id + '/tasks/' + todo_id, headers=headers)
     
     # Then
-    # THIS IS A PROBLEM - NOT ACCURATE IN THE SWAGGER FILE SHOULD BE 405
     print_response(res)
     assert res.status_code == 404
-
 
 def test_delete_project_id_tasks_id_allowed():
 
@@ -116,26 +125,15 @@ def test_delete_project_id_tasks_id_allowed():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
-
-    todo_to_add = {
-        'ID': todo_id
-    }
-
-    project_id = create_project(project)['id']
-
-    # When
-    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
-    
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
-
-    # Then
-    print_response(res)
-    assert len(res_body['projects'][0]) == 6
     
     # When
     res = requests.delete(url + project_id + '/tasks/' + todo_id, headers=headers)
@@ -144,6 +142,7 @@ def test_delete_project_id_tasks_id_allowed():
     assert res.status_code == 200
 
     # When
+    # Confirm it was succesfully deleted
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
@@ -168,19 +167,16 @@ def test_delete_project_id_tasks_id_invalid_project():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
     invalid_project_id = int(project_id) + 1
-
-    todo_to_add = {
-        'ID': todo_id
-    }
-
-    # Create project/category relationship
-    # When
-    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
 
     # When
     res = requests.delete(url + str(invalid_project_id) + '/tasks/' + todo_id, headers=headers)
@@ -215,22 +211,15 @@ def test_delete_project_id_tasks_id_invalid_todo():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
-
-    todo_to_add = {
-        'ID': todo_id
-    }
-
-    project_id = create_project(project)['id']
-
-    # Create project/category relationship
-    # When
-    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
 
     # When
     res = requests.delete(url + project_id + '/tasks/' + str(invalid_todo_id), headers=headers)
@@ -265,6 +254,7 @@ def test_project_id_tasks_id_options_OK():
     print_response(res)
     assert res.status_code == 200
 
+# Undocumented / Unexpected (should return 405)
 def test_project_id_tasks_id_head_not_allowed():
 
     # Given
@@ -276,7 +266,6 @@ def test_project_id_tasks_id_head_not_allowed():
     res = requests.head(url + any_id + '/tasks/' + any_id, headers=headers)
 
     # Then
-    # THIS IS WRONG - IT SHOULD BE 405 ?
     print_response(res)
     assert res.status_code == 404
 

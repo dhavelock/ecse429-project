@@ -2,6 +2,7 @@ import pytest
 import requests
 import json
 from test.common.helper import reset_system, create_project, print_response
+import xml.dom.minidom
 
 url = 'http://localhost:4567/projects/'
 headers = {'Content-Type': 'application/json' } 
@@ -39,8 +40,30 @@ def test_valid_id_get_response():
 
     # Get id from specific project response
     res_project = [project for project in res_body['projects'] if project['title'] == project['title']][0]
-
     assert res_project['id'] == res_specific_project['id']
+
+def test_get_project_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
+
+    project = {
+        'title': 'Project title 1',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    project_id = create_project(project)['id']
+
+    # When
+    res = requests.get(url + project_id, headers=headers)
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
 
 def test_invalid_id_get_response():
 
@@ -94,6 +117,35 @@ def test_project_valid_id_put():
 
     assert res.status_code == 200
     assert res_body['title'] == project_change['title']
+
+def test_project_valid_id_put_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
+
+    project = {
+        'title': 'Project title 1',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    project_change = {
+      'title': 'Project changed title'
+    }
+    
+    res_specific_project = create_project(project)
+    specific_id = res_specific_project['id']
+
+    specific_project_id_url = url + specific_id
+    # When
+    res = requests.put(specific_project_id_url, headers=headers, data=json.dumps(project_change))
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
 
 def test_project_invalid_id_put():
 
@@ -151,6 +203,35 @@ def test_project_valid_id_post():
 
     assert res.status_code == 200
     assert res_body['description'] == project_change['description']
+
+def test_project_valid_id_post_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
+
+    project = {
+        'title': 'Project title 1',
+        'completed': False,
+        'active': True,
+    }
+
+    project_change = {
+      'description': 'This is a description'
+    }
+
+    res_specific_project = create_project(project)
+    specific_id = res_specific_project['id']
+
+    specific_project_id_url = url + specific_id
+
+    # When
+    res = requests.post(specific_project_id_url, headers=headers, data=json.dumps(project_change))
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
 
 def test_project_invalid_id_post():
 

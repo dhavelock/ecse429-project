@@ -53,20 +53,15 @@ def test_get_project_with_tasks():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    todo_to_add = {
-        'ID': todo_id
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
-
-    # When
-    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
-    
-    # Then
-    assert res.status_code == 201
 
     # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
@@ -78,6 +73,41 @@ def test_get_project_with_tasks():
     assert res.status_code == 200
     assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
     assert len(res_body['projects'][0]['tasks'][0]) == 1
+
+def test_get_project_with_tasks_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'} 
+    
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
+    }
+
+    todo_id = create_todo(todo)['id']
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc',
+        'tasks': [
+            {
+                'id': todo_id
+            }
+        ]
+    }
+
+    project_id = create_project(project)['id']
+
+    # When
+    res = requests.get(url + project_id + '/tasks', headers=headers)
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
 
 def test_put_project_id_tasks_not_allowed():
 
@@ -185,7 +215,6 @@ def test_post_project_id_tasks_invalid_project_id():
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find parent thing for relationship projects/' + str(invalid_project_id) + '/tasks'
 
-
 def test_post_project_id_tasks_invalid_todo_id():
 
     # Given
@@ -218,7 +247,7 @@ def test_post_project_id_tasks_invalid_todo_id():
     res_body = res.json()
    
     # Then
-     print_response(res)
+    print_response(res)
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find thing matching value for ID'
 
@@ -348,5 +377,4 @@ def test_project_id_tasks_patch_not_allowed():
 
     # Then
     print_response(res)
-
     assert res.status_code == 405

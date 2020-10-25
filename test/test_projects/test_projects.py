@@ -2,6 +2,7 @@ import pytest
 import requests
 import json
 from test.common.helper import reset_system, create_project, print_response
+import xml.dom.minidom
 
 url = 'http://localhost:4567/projects'
 headers = {'Content-Type': 'application/json' } 
@@ -23,6 +24,20 @@ def test_get_empty_response():
 
     assert res.status_code == 200
     assert len(res_body['projects']) == 0
+
+def test_get_empty_response_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
+
+    # When
+    res = requests.get(url, headers=headers)
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
 
 def test_get_non_empty_response():
 
@@ -63,6 +78,38 @@ def test_get_non_empty_response():
     assert res_project2['title'] == project2['title']
     assert res_project2['description'] == project2['description']
 
+def test_get_non_empty_response_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
+    
+    # Given
+    project1 = {
+        'title': 'Project title 1',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    project2 = {
+        'title': 'Project title 2',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim xyz'
+    }
+
+    create_project(project1)
+    create_project(project2)
+
+    # When
+    res = requests.get(url, headers=headers)
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
+
 def test_project_put_not_allowed():
 
     # When
@@ -93,6 +140,27 @@ def test_post_project_valid_body():
     assert res.status_code == 201
     assert res_body['title'] == project['title']
     assert res_body['description'] == project['description']
+
+def test_post_project_valid_body_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'} 
+
+    project = {
+        'title': 'Project title x',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim xyz'
+    }
+
+    # When
+    res = requests.post(url, headers=headers, data=json.dumps(project))
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 201
 
 def test_post_project_invalid_body():
     

@@ -37,6 +37,78 @@ def test_get_project_empty_categories():
     assert res.status_code == 200
     assert len(res_body['categories']) == 0
 
+def test_get_project_with_categories():
+
+    # Given
+    headers = {'Content-Type': 'application/json' }
+
+    category = {
+        'title': 'category title',
+        'description': 'description of category'
+    }
+
+    category_id = create_category(category)['id']
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc',
+        'categories': [
+            {
+                'id': category_id
+            }
+        ]
+    }
+
+    project_id = create_project(project)['id']
+
+    # When
+    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
+    res_body = res.json()
+
+    # Then
+    print_response(res)
+    assert res.status_code == 200
+    assert res_body['projects'][0]['categories'][0]['id'] == category_id
+    assert len(res_body['projects'][0]['categories'][0]) == 1
+
+def test_get_project_with_categories_xml():
+
+    # Given
+    headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'} 
+
+    category = {
+        'title': 'category title',
+        'description': 'description of category'
+    }
+
+    category_id = create_category(category)['id']
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc',
+        'categories': [
+            {
+                'id': category_id
+            }
+        ]
+    }
+
+    project_id = create_project(project)['id']
+
+    # When
+    res = requests.get(url + project_id + '/categories', headers=headers)
+
+    # Then
+    res_xml = xml.dom.minidom.parseString(res.content)
+    print(res_xml.toprettyxml())
+
+    assert res.status_code == 200
+
+# Undocumented - found through exploratory testing
 def test_post_invalid_project_with_categories():
 
     # Given
@@ -70,51 +142,8 @@ def test_post_invalid_project_with_categories():
 
     # Then
     print_response(res)
-    # THIS IS NOT IN THE DOCUMENTAITON - THIS WAS FOUND IN EXPLORATORY TESTING 
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find parent thing for relationship projects/' + str(specific_non_existing_id) + '/categories'
-
-
-def test_get_project_with_categories():
-
-    # Given
-    headers = {'Content-Type': 'application/json' }
-
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
-    }
-
-    category_id = create_category(category)['id']
-
-    project = {
-        'title': 'Project title',
-        'completed': False,
-        'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id
-    }
-
-    project_id = create_project(project)['id']
-
-    # When
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
-    
-    # Then
-    assert res.status_code == 201
-
-    # When
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
-
-    # Then
-    print_response(res)
-    assert res.status_code == 200
-    assert res_body['projects'][0]['categories'][0]['id'] == category_id
-    assert len(res_body['projects'][0]['categories'][0]) == 1
 
 def test_post_project_with_invalid_categories():
 

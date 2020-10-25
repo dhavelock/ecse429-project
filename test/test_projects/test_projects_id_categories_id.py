@@ -13,6 +13,7 @@ def setup_function(function):
 def teardown_function(function):
     pass
 
+# Undocumented / Unexpected (should return 405)
 def test_get_project_id_categories_id_not_allowed():
 
     # Given
@@ -42,7 +43,6 @@ def test_get_project_id_categories_id_not_allowed():
     res = requests.get(url + project_id + '/categories/' + category_id, headers=headers)
     
     # Then
-    #THIS DOESNT FOLLOW THE DOCUMENTATION - A PROBLEM
     print_response(res)
     assert res.status_code == 404
 
@@ -74,6 +74,7 @@ def test_put_project_id_categories_id_not_allowed():
     print_response(res)
     assert res.status_code == 405
 
+# Undocumented / Unexpected (should return 405)
 def test_post_project_id_categories_id_not_allowed():
 
     # Given
@@ -100,7 +101,6 @@ def test_post_project_id_categories_id_not_allowed():
 
     # Then
     print_response(res)
-    # PROBLEM - THIS SHOULD BE A 405
     assert res.status_code == 404
 
 def test_delete_project_id_categories_id_allowed():
@@ -119,23 +119,15 @@ def test_delete_project_id_categories_id_allowed():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id
+        'description': 'agna aliqua. Ut enim abc',
+        'categories': [
+            {
+                'id': category_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
-
-    # Create the relationship
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
-    
-    # Check to see relationship created
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
-
-    assert len(res_body['projects'][0]) == 6
 
     # When
     res = requests.delete(url + project_id + '/categories/' + category_id, headers=headers)
@@ -168,32 +160,22 @@ def test_delete_project_id_categories_id_invalid_project():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id
+        'description': 'agna aliqua. Ut enim abc',
+        'categories': [
+            {
+                'id': category_id
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
     invalid_project_id = int(project_id) + 1
-
-    # Create project/category relationship
-
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
-
-    # Check to see relationship created
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
-
-    assert len(res_body['projects'][0]) == 6
 
     # When
     res = requests.delete(url + str(invalid_project_id) + '/categories/' + category_id, headers=headers)
 
     # Then
     assert res.status_code == 400
-
 
     # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
@@ -222,7 +204,12 @@ def test_delete_project_id_categories_id_invalid_category():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
+        'description': 'agna aliqua. Ut enim abc',
+        'categories': [
+            {
+                'id': category_id
+            }
+        ]
     }
 
     category_to_add = {
@@ -230,15 +217,6 @@ def test_delete_project_id_categories_id_invalid_category():
     }
 
     project_id = create_project(project)['id']
-
-    # Create project/category relationship
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
-    
-    # Check to see relationship created
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
-
-    assert len(res_body['projects'][0]) == 6
 
     # When
     res = requests.delete(url + project_id + '/categories/' + str(invalid_category_id), headers=headers)
@@ -282,21 +260,15 @@ def test_delete_project_id_categories_id_no_relationship():
         'title': 'Project title',
         'completed': False,
         'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id1
+        'description': 'agna aliqua. Ut enim abc',
+        'categories': [
+            {
+                'id': category_id1
+            }
+        ]
     }
 
     project_id = create_project(project)['id']
-
-    # Create project/category relationship
-
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
-    
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
 
     # When
     res = requests.delete(url + project_id + '/categories/' + category_id2, headers=headers)
@@ -330,6 +302,7 @@ def test_project_id_categories_id_options_OK():
     print_response(res)
     assert res.status_code == 200
 
+# Undocumented / Unexpected (should return 405)
 def test_project_id_categories_id_head_not_allowed():
 
     # Given
@@ -340,7 +313,6 @@ def test_project_id_categories_id_head_not_allowed():
     # When
     res = requests.head(url + any_id + '/categories/' + any_id, headers=headers)
 
-    # THIS IS WRONG - IT SHOULD BE 405 ?
     # Then
     print_response(res)
     assert res.status_code == 404
