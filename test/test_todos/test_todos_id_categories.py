@@ -183,6 +183,7 @@ def test_post_todos_categories_invalid_body():
 
     assert res.status_code == 400
 
+# Undocumented
 def test_post_todos_categories_todo_does_not_exist():
 
     # Given
@@ -209,6 +210,7 @@ def test_post_todos_categories_todo_does_not_exist():
 
     assert res.status_code == 404
 
+# Undocumented
 def test_post_todos_categories_category_does_not_exist():
 
     # Given
@@ -299,15 +301,15 @@ def test_head_todos_categories_ok():
 
     assert res.status_code == 200
 
-def test_delete_todos_categories_not_allowed():
+def test_patch_todos_categories_not_allowed():
 
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    todo_id = '999'
+    any_id = '999'
 
     # When
-    res = requests.put(url(todo_id), headers=headers)
+    res = requests.patch(url(any_id), headers=headers)
 
     # Then
     print_response(res)
