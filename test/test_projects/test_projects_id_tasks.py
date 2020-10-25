@@ -13,7 +13,7 @@ def setup_function(function):
 def teardown_function(function):
     pass
 
-def test_get_project_empty_categories():
+def test_get_project_empty_tasks():
 
     # Given
     project = {
@@ -23,33 +23,31 @@ def test_get_project_empty_categories():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    res_specific_project = create_project(project)
-    specific_id = res_specific_project['id']
+    project_id = create_project(project)['id']
 
-    specific_project_id_url = url + specific_id
+    specific_project_id_url = url + project_id
 
     # When
-    res = requests.get(specific_project_id_url + '/categories', headers=headers)
+    res = requests.get(specific_project_id_url + '/tasks', headers=headers)
     res_body = res.json()
 
     # Then
     print_response(res)
 
     assert res.status_code == 200
-    assert len(res_body['categories']) == 0
+    assert len(res_body['todos']) == 0
 
-#testing adding a valid category to an invalid project - expected behaviour is 200 which is not necessarily correct
-def test_post_invalid_project_with_categories():
+def test_get_project_with_tasks():
 
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
     }
 
-    category_id = str(create_category(category)['id'])
+    todo_id = create_todo(todo)['id']
 
     project = {
         'title': 'Project title',
@@ -58,55 +56,15 @@ def test_post_invalid_project_with_categories():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': int(category_id)
-    }
-
-    res_specific_project = create_project(project)
-    specific_non_existing_id = int(res_specific_project['id']) + 1
-    specific_project_id_url = url + str(specific_non_existing_id)
-
-    # When
-    res = requests.post(specific_project_id_url + '/categories', headers=headers, data=json.dumps(category_to_add) )
-    res_body = res.json()
-
-    # Then
-    print_response(res)
-
-    # THIS IS NOT IN THE DOCUMENTAITON - THIS WAS FOUND IN EXPLORATORY TESTING 
-    assert res.status_code == 404
-    assert res_body['errorMessages'][0] == 'Could not find parent thing for relationship projects/' + str(specific_non_existing_id) + '/categories'
-
-
-def test_get_project_with_categories():
-
-    # Given
-    headers = {'Content-Type': 'application/json' }
-
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
-    }
-
-    category_id = create_category(category)['id']
-
-    project = {
-        'title': 'Project title',
-        'completed': False,
-        'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id
+    todo_to_add = {
+        'ID': todo_id
     }
 
     project_id = create_project(project)['id']
 
     # When
-    res = requests.get('http://localhost:4567/categories/' + category_id, headers=headers)
 
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
+    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     # Then
     assert res.status_code == 201
@@ -119,21 +77,20 @@ def test_get_project_with_categories():
 
     # Then
     assert res.status_code == 200
-    assert res_body['projects'][0]['categories'][0]['id'] == category_id
-    assert len(res_body['projects'][0]['categories'][0]) == 1
+    assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
+    assert len(res_body['projects'][0]['tasks'][0]) == 1
 
-def test_get_project_with_invalid_categories():
+def test_put_project_id_tasks_not_allowed():
 
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
     }
 
-    category_id = create_category(category)['id']
-    invalid_category_id = int(category_id) + 1
+    todo_id = create_todo(todo)['id']
 
     project = {
         'title': 'Project title',
@@ -142,36 +99,146 @@ def test_get_project_with_invalid_categories():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': invalid_category_id
+    todo_to_add = {
+        'ID': todo_id
     }
 
     project_id = create_project(project)['id']
 
     # When
 
-    res = requests.get('http://localhost:4567/categories/' + category_id, headers=headers)
+    res = requests.put(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
+    
+    # Then
+    assert res.status_code == 405
 
-    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
+def test_post_project_id_tasks():
+
+    # Given
+    headers = {'Content-Type': 'application/json' }
+
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
+    }
+
+    todo_id = create_todo(todo)['id']
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    todo_to_add = {
+        'ID': todo_id
+    }
+
+    project_id = create_project(project)['id']
+
+    # When
+
+    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
+    
+    # Then
+    assert res.status_code == 201
+
+    # When
+    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
+
     res_body = res.json()
 
     print_response(res)
 
+    # Then, assert a relationship was made
+    assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
+    assert len(res_body['projects'][0]['tasks'][0]) == 1
+
+def test_post_project_id_tasks_invalid_project_id():
+
+    # Given
+    headers = {'Content-Type': 'application/json' }
+
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
+    }
+
+    todo_id = create_todo(todo)['id']
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    todo_to_add = {
+        'ID': todo_id
+    }
+
+    project_id = create_project(project)['id']
+    invalid_project_id = int(project_id) + 1
+
+    # When
+
+    res = requests.post(url + str(invalid_project_id) + '/tasks', headers=headers, data=json.dumps(todo_to_add))
+    res_body = res.json()
+    print_response(res)
+    # Then
+    assert res.status_code == 404
+    assert res_body['errorMessages'][0] == 'Could not find parent thing for relationship projects/' + str(invalid_project_id) + '/tasks'
+
+
+def test_post_project_id_tasks_invalid_todo_id():
+
+    # Given
+    headers = {'Content-Type': 'application/json' }
+
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
+    }
+
+    todo_id = create_todo(todo)['id']
+    invalid_todo_id = int(todo_id) + 1
+
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    todo_to_add = {
+        'ID': str(invalid_todo_id)
+    }
+
+    project_id = create_project(project)['id']
+
+    # When
+
+    res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
+    res_body = res.json()
+    print_response(res)
     # Then
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find thing matching value for ID'
 
-def test_project_id_category_put_not_allowed():
+def test_delete_project_id_tasks():
 
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
     }
 
-    category_id = create_category(category)['id']
+    todo_id = create_todo(todo)['id']
+
 
     project = {
         'title': 'Project title',
@@ -180,54 +247,21 @@ def test_project_id_category_put_not_allowed():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': category_id
+    todo_to_add = {
+        'ID': todo_id
     }
 
     project_id = create_project(project)['id']
 
     # When
-    res = requests.put(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
 
-    # Then
+    res = requests.delete(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
+
     print_response(res)
-
+    # Then
     assert res.status_code == 405
 
-def test_project_id_category_delete_not_allowed():
-
-    # Given
-    headers = {'Content-Type': 'application/json' }
-
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
-    }
-
-    category_id = create_category(category)['id']
-
-    project = {
-        'title': 'Project title',
-        'completed': False,
-        'active': True,
-        'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id
-    }
-
-    project_id = create_project(project)['id']
-
-    # When
-    res = requests.delete(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
-
-    # Then
-    print_response(res)
-
-    assert res.status_code == 405
-
-def test_project_id_category_options_OK():
+def test_project_id_tasks_options_OK():
 
     # Given
     headers = {'Content-Type': 'application/json' }
@@ -260,7 +294,7 @@ def test_project_id_category_options_OK():
 
     assert res.status_code == 200
 
-def test_project_id_category_head_OK():
+def test_project_id_tasks_head_OK():
 
     # Given
     headers = {'Content-Type': 'application/json' }
@@ -293,7 +327,7 @@ def test_project_id_category_head_OK():
 
     assert res.status_code == 200
 
-def test_project_id_category_patch_not_allowed():
+def test_project_id_tasks_patch_not_allowed():
 
     # Given
     headers = {'Content-Type': 'application/json' }
@@ -325,6 +359,3 @@ def test_project_id_category_patch_not_allowed():
     print_response(res)
 
     assert res.status_code == 405
-
-
-
