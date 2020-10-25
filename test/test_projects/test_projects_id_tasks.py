@@ -63,7 +63,6 @@ def test_get_project_with_tasks():
     project_id = create_project(project)['id']
 
     # When
-
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     # Then
@@ -106,7 +105,6 @@ def test_put_project_id_tasks_not_allowed():
     project_id = create_project(project)['id']
 
     # When
-
     res = requests.put(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     # Then
@@ -138,7 +136,6 @@ def test_post_project_id_tasks():
     project_id = create_project(project)['id']
 
     # When
-
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     # Then
@@ -146,12 +143,10 @@ def test_post_project_id_tasks():
 
     # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-
     res_body = res.json()
 
-    print_response(res)
-
     # Then, assert a relationship was made
+    print_response(res)
     assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
     assert len(res_body['projects'][0]['tasks'][0]) == 1
 
@@ -182,11 +177,11 @@ def test_post_project_id_tasks_invalid_project_id():
     invalid_project_id = int(project_id) + 1
 
     # When
-
     res = requests.post(url + str(invalid_project_id) + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     res_body = res.json()
-    print_response(res)
+    
     # Then
+    print_response(res)
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find parent thing for relationship projects/' + str(invalid_project_id) + '/tasks'
 
@@ -219,11 +214,11 @@ def test_post_project_id_tasks_invalid_todo_id():
     project_id = create_project(project)['id']
 
     # When
-
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     res_body = res.json()
-    print_response(res)
+   
     # Then
+     print_response(res)
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find thing matching value for ID'
 
@@ -239,7 +234,6 @@ def test_delete_project_id_tasks():
 
     todo_id = create_todo(todo)['id']
 
-
     project = {
         'title': 'Project title',
         'completed': False,
@@ -254,11 +248,10 @@ def test_delete_project_id_tasks():
     project_id = create_project(project)['id']
 
     # When
-
     res = requests.delete(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
-
-    print_response(res)
+    
     # Then
+    print_response(res)
     assert res.status_code == 405
 
 def test_project_id_tasks_options_OK():
@@ -291,7 +284,6 @@ def test_project_id_tasks_options_OK():
 
     # Then
     print_response(res)
-
     assert res.status_code == 200
 
 def test_project_id_tasks_head_OK():
@@ -324,7 +316,6 @@ def test_project_id_tasks_head_OK():
 
     # Then
     print_response(res)
-
     assert res.status_code == 200
 
 def test_project_id_tasks_patch_not_allowed():

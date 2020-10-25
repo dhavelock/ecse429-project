@@ -15,6 +15,7 @@ def teardown_function(function):
 
 def test_get_project_id_tasks_id_not_allowed():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     todo = {
@@ -35,13 +36,15 @@ def test_get_project_id_tasks_id_not_allowed():
 
     # When
     res = requests.get(url + project_id + '/tasks/' + todo_id, headers=headers)
-    print_response(res)
+    
     # Then
     #THIS DOESNT FOLLOW THE DOCUMENTATION - A PROBLEM
+    print_response(res)
     assert res.status_code == 404
 
 def test_put_project_id_tasks_id_not_allowed():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     todo = {
@@ -62,12 +65,14 @@ def test_put_project_id_tasks_id_not_allowed():
 
     # When
     res = requests.put(url + project_id + '/tasks/' + todo_id, headers=headers)
-    print_response(res)
+
     # Then
+    print_response(res)
     assert res.status_code == 405
 
 def test_post_project_id_tasks_id_not_allowed():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     todo = {
@@ -88,14 +93,16 @@ def test_post_project_id_tasks_id_not_allowed():
 
     # When
     res = requests.post(url + project_id + '/tasks/' + todo_id, headers=headers)
-    print_response(res)
+    
     # Then
     # THIS IS A PROBLEM - NOT ACCURATE IN THE SWAGGER FILE SHOULD BE 405
+    print_response(res)
     assert res.status_code == 404
 
 
 def test_delete_project_id_tasks_id_allowed():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     todo = {
@@ -120,28 +127,34 @@ def test_delete_project_id_tasks_id_allowed():
 
     project_id = create_project(project)['id']
 
+    # When
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
-    assert len(res_body['projects'][0]) == 6
-
+    # Then
     print_response(res)
+    assert len(res_body['projects'][0]) == 6
+    
     # When
     res = requests.delete(url + project_id + '/tasks/' + todo_id, headers=headers)
 
+    # Then
     assert res.status_code == 200
 
+    # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
-    print_response(res)
 
+    # Then
+    print_response(res)
     assert len(res_body['projects'][0]) == 5
 
 
 def test_delete_project_id_tasks_id_invalid_project():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     todo = {
@@ -166,27 +179,28 @@ def test_delete_project_id_tasks_id_invalid_project():
     }
 
     # Create project/category relationship
-
+    # When
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
-    
-    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
-    res_body = res.json()
 
     # When
     res = requests.delete(url + str(invalid_project_id) + '/tasks/' + todo_id, headers=headers)
 
+    # Then
     assert res.status_code == 400
 
+    #When 
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
-    print_response(res)
 
+    # Then
+    print_response(res)
     # assert relationship wasn't deleted
     assert len(res_body['projects'][0]) == 6
     assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
 
 def test_delete_project_id_tasks_id_invalid_todo():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     todo = {
@@ -196,7 +210,6 @@ def test_delete_project_id_tasks_id_invalid_todo():
 
     todo_id = create_todo(todo)['id']
     invalid_todo_id = int(todo_id) + 1
-
 
     project = {
         'title': 'Project title',
@@ -214,31 +227,33 @@ def test_delete_project_id_tasks_id_invalid_todo():
     project_id = create_project(project)['id']
 
     # Create project/category relationship
-
+    # When
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
-    
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
     # When
     res = requests.delete(url + project_id + '/tasks/' + str(invalid_todo_id), headers=headers)
     res_body = res.json()
-    print_response(res)
 
+    # Then
+    print_response(res)
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find any instances with projects/' + project_id + '/tasks/' + str(invalid_todo_id)
 
-
+    # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
-    print_response(res)
 
+    # Then
+    print_response(res)
     # assert relationship wasn't deleted
     assert len(res_body['projects'][0]) == 6
     assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
 
 def test_project_id_tasks_id_options_OK():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     any_id ='999'
@@ -246,10 +261,13 @@ def test_project_id_tasks_id_options_OK():
     # When
     res = requests.options(url + any_id + '/tasks/' + any_id, headers=headers)
 
+    # Then
+    print_response(res)
     assert res.status_code == 200
 
 def test_project_id_tasks_id_head_not_allowed():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     any_id = '999'
@@ -257,11 +275,14 @@ def test_project_id_tasks_id_head_not_allowed():
     # When
     res = requests.head(url + any_id + '/tasks/' + any_id, headers=headers)
 
+    # Then
     # THIS IS WRONG - IT SHOULD BE 405 ?
+    print_response(res)
     assert res.status_code == 404
 
 def test_project_id_tasks_id_patch_not_allowed():
 
+    # Given
     headers = {'Content-Type': 'application/json' }
 
     any_id = '999'
@@ -269,4 +290,6 @@ def test_project_id_tasks_id_patch_not_allowed():
     # When
     res = requests.patch(url + any_id + '/tasks/' + any_id, headers=headers)
 
+    # Then
+    print_response(res)
     assert res.status_code == 405

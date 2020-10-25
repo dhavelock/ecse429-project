@@ -59,10 +59,8 @@ def test_get_non_empty_response():
     res_project2 = [project for project in res_body['projects'] if project['title'] == project2['title']][0]
 
     assert res_project1['title'] == project1['title']
-    # assert res_todo1['doneStatus'] == todo1['doneStatus']
     assert res_project1['description'] == project1['description']
     assert res_project2['title'] == project2['title']
-    # assert res_todo2['doneStatus'] == todo2['doneStatus']
     assert res_project2['description'] == project2['description']
 
 def test_project_put_not_allowed():
@@ -97,6 +95,7 @@ def test_post_project_valid_body():
     assert res_body['description'] == project['description']
 
 def test_post_project_invalid_body():
+    
     # Given
     project = {
         'id': 1

@@ -40,7 +40,6 @@ def test_valid_id_get_response():
     # Get id from specific project response
     res_project = [project for project in res_body['projects'] if project['title'] == project['title']][0]
 
-
     assert res_project['id'] == res_specific_project['id']
 
 def test_invalid_id_get_response():
@@ -215,8 +214,6 @@ def test_delete_invalid_project():
     }
 
     res_specific_project = create_project(project)
-
-    res_specific_project = create_project(project)
     specific_non_existing_id = int(res_specific_project['id']) + 1
     specific_project_id_url = url + str(specific_non_existing_id)
 
@@ -283,8 +280,6 @@ def test_head_invalid_project():
         'active': True,
         'description': 'agna aliqua. Ut enim abc'
     }
-
-    res_specific_project = create_project(project)
 
     res_specific_project = create_project(project)
     specific_non_existing_id = int(res_specific_project['id']) + 1

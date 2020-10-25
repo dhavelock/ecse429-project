@@ -34,11 +34,9 @@ def test_get_project_empty_categories():
 
     # Then
     print_response(res)
-
     assert res.status_code == 200
     assert len(res_body['categories']) == 0
 
-#testing adding a valid category to an invalid project - expected behaviour is 200 which is not necessarily correct
 def test_post_invalid_project_with_categories():
 
     # Given
@@ -72,7 +70,6 @@ def test_post_invalid_project_with_categories():
 
     # Then
     print_response(res)
-
     # THIS IS NOT IN THE DOCUMENTAITON - THIS WAS FOUND IN EXPLORATORY TESTING 
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find parent thing for relationship projects/' + str(specific_non_existing_id) + '/categories'
@@ -104,8 +101,6 @@ def test_get_project_with_categories():
     project_id = create_project(project)['id']
 
     # When
-    res = requests.get('http://localhost:4567/categories/' + category_id, headers=headers)
-
     res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
     
     # Then
@@ -115,14 +110,13 @@ def test_get_project_with_categories():
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
-    print_response(res)
-
     # Then
+    print_response(res)
     assert res.status_code == 200
     assert res_body['projects'][0]['categories'][0]['id'] == category_id
     assert len(res_body['projects'][0]['categories'][0]) == 1
 
-def test_get_project_with_invalid_categories():
+def test_post_project_with_invalid_categories():
 
     # Given
     headers = {'Content-Type': 'application/json' }
@@ -149,15 +143,11 @@ def test_get_project_with_invalid_categories():
     project_id = create_project(project)['id']
 
     # When
-
-    res = requests.get('http://localhost:4567/categories/' + category_id, headers=headers)
-
     res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
     res_body = res.json()
 
-    print_response(res)
-
     # Then
+    print_response(res)
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find thing matching value for ID'
 
@@ -191,7 +181,6 @@ def test_project_id_category_put_not_allowed():
 
     # Then
     print_response(res)
-
     assert res.status_code == 405
 
 def test_project_id_category_delete_not_allowed():
@@ -224,7 +213,6 @@ def test_project_id_category_delete_not_allowed():
 
     # Then
     print_response(res)
-
     assert res.status_code == 405
 
 def test_project_id_category_options_OK():
@@ -257,7 +245,6 @@ def test_project_id_category_options_OK():
 
     # Then
     print_response(res)
-
     assert res.status_code == 200
 
 def test_project_id_category_head_OK():
@@ -290,7 +277,6 @@ def test_project_id_category_head_OK():
 
     # Then
     print_response(res)
-
     assert res.status_code == 200
 
 def test_project_id_category_patch_not_allowed():
