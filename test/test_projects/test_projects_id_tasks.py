@@ -266,12 +266,12 @@ def test_project_id_tasks_options_OK():
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
     }
 
-    category_id = create_category(category)['id']
+    todo_id = create_todo(todo)['id']
 
     project = {
         'title': 'Project title',
@@ -280,14 +280,14 @@ def test_project_id_tasks_options_OK():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': category_id
+    todo_to_add = {
+        'ID': todo_id
     }
 
     project_id = create_project(project)['id']
 
     # When
-    res = requests.options(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
+    res = requests.options(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
 
     # Then
     print_response(res)
@@ -299,12 +299,12 @@ def test_project_id_tasks_head_OK():
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
     }
 
-    category_id = create_category(category)['id']
+    todo_id = create_todo(todo)['id']
 
     project = {
         'title': 'Project title',
@@ -313,14 +313,14 @@ def test_project_id_tasks_head_OK():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': category_id
+    todo_to_add = {
+        'ID': todo_id
     }
 
     project_id = create_project(project)['id']
 
     # When
-    res = requests.head(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
+    res = requests.head(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
 
     # Then
     print_response(res)
@@ -332,12 +332,12 @@ def test_project_id_tasks_patch_not_allowed():
     # Given
     headers = {'Content-Type': 'application/json' }
 
-    category = {
-        'title': 'category title',
-        'description': 'description of category'
+    todo = {
+        'title': 'todo title',
+        'description': 'description of todo'
     }
 
-    category_id = create_category(category)['id']
+    todo_id = create_todo(todo)['id']
 
     project = {
         'title': 'Project title',
@@ -346,14 +346,14 @@ def test_project_id_tasks_patch_not_allowed():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': category_id
+    todo_to_add = {
+        'ID': todo_id
     }
 
     project_id = create_project(project)['id']
 
     # When
-    res = requests.patch(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
+    res = requests.patch(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
 
     # Then
     print_response(res)
