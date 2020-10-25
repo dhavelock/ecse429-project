@@ -62,10 +62,6 @@ def test_put_project_id_categories_id_not_allowed():
         'description': 'agna aliqua. Ut enim abc'
     }
 
-    category_to_add = {
-        'ID': category_id
-    }
-
     project_id = create_project(project)['id']
 
     # When
@@ -90,10 +86,6 @@ def test_post_project_id_categories_id_not_allowed():
         'completed': False,
         'active': True,
         'description': 'agna aliqua. Ut enim abc'
-    }
-
-    category_to_add = {
-        'ID': category_id
     }
 
     project_id = create_project(project)['id']
