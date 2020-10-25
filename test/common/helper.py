@@ -18,6 +18,10 @@ def create_category(body, headers={'Content-Type': 'application/json'}):
     res = requests.post(base_url + 'categories', headers=headers, data=json.dumps(body))
     return res.json()
 
+def create_project(body, headers={'Content-Type': 'application/json'}):
+    res = requests.post(base_url + 'projects', headers=headers, data=json.dumps(body))
+    return res.json()
+
 def print_response(response):
     print('Status Code:', response.status_code)
 
