@@ -246,15 +246,23 @@ def test_delete_category_project_category_does_not_exist():
 
     project_id = create_project(project)['id']
 
-    category_id = '999'
+    category = {
+        'title': 'todo title'
+    }
+
+    category_id = create_category(category)['id']
+
+    create_category_project_relation(category_id, project_id)
+
+    invalid_id = '999'
 
     # When
-    res = requests.delete(url(category_id, project_id), headers=headers)
+    res = requests.delete(url(invalid_id, project_id), headers=headers)
 
     # Then
     print_response(res)
 
-    assert res.status_code == 404
+    assert res.status_code == 400
 
 
 def test_options_category_project_ok():

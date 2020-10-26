@@ -1,7 +1,7 @@
 import pytest
 import requests
 import json
-from test.common.helper import reset_system, create_todo, create_category, print_response
+from test.common.helper import reset_system, create_todo, create_category, print_response, create_todo_category_relation
 import xml.dom.minidom
 
 url = 'http://localhost:4567/categories/'
@@ -232,12 +232,10 @@ def test_delete_category_id_todos_id_invalid_todo():
     assert res_body['errorMessages'][0] == 'Could not find any instances with categories/' + \
         category_id + '/todos/' + str(invalid_todo_id)
 
-    # When
     res = requests.get('http://localhost:4567/categories/' +
                        category_id, headers=headers)
     res_body = res.json()
 
-    # Then
     print_response(res)
     # assert relationship wasn't deleted
     assert len(res_body['categories'][0]) == 4

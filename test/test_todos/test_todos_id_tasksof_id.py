@@ -240,17 +240,25 @@ def test_delete_todo_project_todo_does_not_exist():
             'description': 'a description'
     }
 
+    todo = {
+        'title': 'todo title'
+    }
+
     project_id = create_project(project)['id']
 
-    todo_id = '999'
+    todo_id = create_todo(todo)['id']
+
+    create_todo_project_relation(todo_id, project_id)
+
+    invalid_id = '999'
 
     # When
-    res = requests.delete(url(todo_id, project_id), headers=headers)
+    res = requests.delete(url(invalid_id, project_id), headers=headers)
 
     # Then
     print_response(res)
 
-    assert res.status_code == 404
+    assert res.status_code == 400
 
 def test_options_todo_project_ok():
 

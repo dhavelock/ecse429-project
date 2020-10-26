@@ -226,15 +226,23 @@ def test_delete_todo_category_todo_does_not_exist():
 
     category_id = create_category(category)['id']
 
-    todo_id = '999'
+    todo = {
+        'title': 'todo title'
+    }
+
+    todo_id = create_todo(todo)['id']
+
+    create_todo_category_relation(todo_id, category_id)
+
+    invalid_id = '999'
 
     # When
-    res = requests.delete(url(todo_id, category_id), headers=headers)
+    res = requests.delete(url(invalid_id, category_id), headers=headers)
 
     # Then
     print_response(res)
 
-    assert res.status_code == 404
+    assert res.status_code == 400
 
 def test_delete_todo_category_category_does_not_exist():
 
