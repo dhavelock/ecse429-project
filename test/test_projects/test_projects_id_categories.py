@@ -1,10 +1,11 @@
 import pytest
 import requests
 import json
-from test.common.helper import reset_system, create_todo, create_project, create_category, print_response
+from test.common.helper import reset_system, create_todo, create_project, create_category, print_response, create_category_project_relation
 import xml.dom.minidom
 
 url = 'http://localhost:4567/projects/'
+base_url = 'http://localhost:4567/'
 headers = {'Content-Type': 'application/json' }
 
 def setup_function(function):
@@ -107,6 +108,52 @@ def test_get_project_with_categories_xml():
     print(res_xml.toprettyxml())
 
     assert res.status_code == 200
+
+def test_post_project_categories_valid():
+
+    # Given
+    headers = {'Content-Type': 'application/json' }
+
+    category = {
+        'title': 'category title',
+        'description': 'description of category'
+    }
+
+    category_id = str(create_category(category)['id'])
+
+    project = {
+        'title': 'Project title',
+        'completed': False,
+        'active': True,
+        'description': 'agna aliqua. Ut enim abc'
+    }
+
+    project_id = create_project(project)['id']
+
+    category_to_add = {
+        'id': category_id
+    }
+
+    # When
+    res = requests.post(url + project_id + '/categories', headers=headers, data=json.dumps(category_to_add))
+
+    # Then
+    print_response(res)
+    assert res.status_code == 201
+
+    # Fetch project and category to ensure relation was created
+    res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
+    res_body = res.json()
+
+    print_response(res)
+    assert res_body['projects'][0].get('categories') is not None
+
+    res = requests.get('http://localhost:4567/categories/' + category_id, headers=headers)
+    res_body = res.json()
+
+    print_response(res)
+    assert res_body['categories'][0].get('projects') is not None
+
 
 # Undocumented - found through exploratory testing
 def test_post_invalid_project_with_categories():

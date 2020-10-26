@@ -138,6 +138,7 @@ def test_put_project_id_tasks_not_allowed():
     res = requests.put(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     # Then
+    print_response(res)
     assert res.status_code == 405
 
 def test_post_project_id_tasks():
@@ -169,16 +170,21 @@ def test_post_project_id_tasks():
     res = requests.post(url + project_id + '/tasks', headers=headers, data=json.dumps(todo_to_add))
     
     # Then
+    print_response(res)
     assert res.status_code == 201
 
-    # When
+    # Confirm it was succesfully created from both project and todo
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
-    # Then, assert a relationship was made
     print_response(res)
     assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
-    assert len(res_body['projects'][0]['tasks'][0]) == 1
+
+    res = requests.get('http://localhost:4567/todos/' + todo_id, headers=headers)
+    res_body = res.json()
+
+    print_response(res)
+    assert res_body['todos'][0]['tasksof'][0]['id'] == project_id
 
 def test_post_project_id_tasks_invalid_project_id():
 

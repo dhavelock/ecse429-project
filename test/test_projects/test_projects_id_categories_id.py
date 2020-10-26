@@ -1,7 +1,7 @@
 import pytest
 import requests
 import json
-from test.common.helper import reset_system, create_todo, create_project, create_category, print_response
+from test.common.helper import reset_system, create_todo, create_project, create_category, print_response, create_category_project_relation
 import xml.dom.minidom
 
 url = 'http://localhost:4567/projects/'
@@ -127,20 +127,26 @@ def test_delete_project_id_categories_id_allowed():
 
     project_id = create_project(project)['id']
 
+    create_category_project_relation(category_id, project_id)
+
     # When
     res = requests.delete(url + project_id + '/categories/' + category_id, headers=headers)
 
     # Then
     assert res.status_code == 200
 
-    # Check that relationship was deleted
-    # When
+    # Check that relationship was deleted from both project and category
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
-    # Then
     print_response(res)
-    assert len(res_body['projects'][0]) == 5
+    assert res_body['projects'][0].get('categories') is None
+
+    res = requests.get('http://localhost:4567/categories/' + category_id, headers=headers)
+    res_body = res.json()
+
+    print_response(res)
+    assert res_body['categories'][0].get('projects') is None
 
 def test_delete_project_id_categories_id_invalid_project():
 
@@ -175,11 +181,9 @@ def test_delete_project_id_categories_id_invalid_project():
     # Then
     assert res.status_code == 400
 
-    # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
-    # Then
     print_response(res)
     # assert relationship wasn't deleted
     assert len(res_body['projects'][0]) == 6
@@ -225,11 +229,9 @@ def test_delete_project_id_categories_id_invalid_category():
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find any instances with projects/' + project_id + '/categories/' + str(invalid_category_id)
 
-    # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
     
-    # Then
     print_response(res)
     # assert relationship wasn't deleted
     assert len(res_body['projects'][0]) == 6
@@ -276,11 +278,9 @@ def test_delete_project_id_categories_id_no_relationship():
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Could not find any instances with projects/' + project_id + '/categories/' + category_id2
 
-    # When
     res = requests.get('http://localhost:4567/projects/' + project_id, headers=headers)
     res_body = res.json()
 
-    # Then
     print_response(res)
     # assert relationship wasn't deleted
     assert len(res_body['projects'][0]) == 6

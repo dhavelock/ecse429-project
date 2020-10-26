@@ -55,6 +55,13 @@ def create_category_project_relation(category_id, project_id):
 
 
 def print_response(response):
+    print('Request:')
+    print(response.request.method, response.request.url)
+    print('Headers:', response.request.headers)
+    print('Body:', response.request.body)
+    print()
+
+    print('Response:')
     print('Status Code:', response.status_code)
 
     try:
