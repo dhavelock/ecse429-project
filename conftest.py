@@ -32,4 +32,4 @@ def pytest_sessionfinish(session, exitstatus):
     try:
         requests.get('http://localhost:4567/shutdown')
     except requests.exceptions.ConnectionError as e:
-        print('Todo Manager Shutdown')
+        print('\nTodo Manager Shutdown')
