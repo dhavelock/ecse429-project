@@ -1,11 +1,11 @@
 import pytest
 import requests
 import json
-from test.common.helper import reset_system, create_category, print_response
+from test.common.helper import reset_system, create_category, print_response, create_todo, create_project
 import xml.dom.minidom
 
 url = 'http://localhost:4567/categories'
-
+base_url = 'http://localhost:4567/'
 
 def setup_function(function):
     reset_system()
@@ -147,6 +147,89 @@ def test_post_category_valid_body():
     assert res.status_code == 201
     assert res_body['title'] == category['title']
     assert res_body['description'] == category['description']
+
+def test_post_category_valid_body_with_todo_relation():
+
+    # Given
+    headers = {'Content-Type': 'application/json'}
+
+    todo = {
+        'title': 'todo title'
+    }
+
+    todo_id = create_todo(todo)['id']
+
+    category = {
+        'title': 'Task title 1',
+        'description': 'this is a description',
+        'todos': [
+            {
+                'id': todo_id
+            }
+        ]
+    }
+
+    # When
+    res = requests.post(url, headers=headers, data=json.dumps(category))
+    res_body = res.json()
+
+    # Then
+    print_response(res)
+
+    assert res.status_code == 201
+    assert res_body['title'] == category['title']
+    assert res_body['description'] == category['description']
+    assert res_body['todos'][0]['id'] == todo_id
+
+    # Assert category was added to todo
+    updated_todo = requests.get(base_url + 'todos/' + todo_id, headers=headers)
+    updated_todo_body = updated_todo.json()
+
+    print_response(updated_todo)
+    assert updated_todo_body['todos'][0]['categories'][0]['id'] == res_body['id']
+
+def test_post_category_valid_body_with_project_relation():
+
+    # Given
+    headers = {'Content-Type': 'application/json'}
+
+    project = {
+            'title': 'Office Work',
+            'completed': False,
+            'active': False,
+            'description': 'a description'
+    }
+
+    project_id = create_project(project)['id']
+
+    category = {
+        'title': 'Task title 1',
+        'description': 'this is a description',
+        'projects': [
+            {
+                'id': project_id
+            }
+        ]
+    }
+
+    # When
+    res = requests.post(url, headers=headers, data=json.dumps(category))
+    res_body = res.json()
+
+    # Then
+    print_response(res)
+
+    assert res.status_code == 201
+    assert res_body['title'] == category['title']
+    assert res_body['description'] == category['description']
+    assert res_body['projects'][0]['id'] == project_id
+
+   # Assert category was added to project
+    updated_project = requests.get(base_url + 'projects/' + project_id, headers=headers)
+    updated_project_body = updated_project.json()
+
+    print_response(updated_project)
+    assert updated_project_body['projects'][0]['categories'][0]['id'] == res_body['id']
 
 
 def test_post_category_valid_body_xml():
