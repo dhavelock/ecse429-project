@@ -79,10 +79,10 @@ def test_get_non_empty_response():
     res_todo2 = [todo for todo in res_body['todos'] if todo['title'] == todo2['title']][0]
 
     assert res_todo1['title'] == todo1['title']
-    # assert res_todo1['doneStatus'] == todo1['doneStatus']
+    assert res_todo1['doneStatus'] == str(todo1['doneStatus']).lower()
     assert res_todo1['description'] == todo1['description']
     assert res_todo2['title'] == todo2['title']
-    # assert res_todo2['doneStatus'] == todo2['doneStatus']
+    assert res_todo2['doneStatus'] == str(todo2['doneStatus']).lower()
     assert res_todo2['description'] == todo2['description']
 
 def test_get_non_empty_response_xml():
@@ -144,7 +144,7 @@ def test_post_todo_valid_body():
 
     assert res.status_code == 201
     assert res_body['title'] == todo['title']
-    # assert res_body['doneStatus'] == todo['doneStatus']
+    assert res_body['doneStatus'] == str(todo['doneStatus']).lower()
     assert res_body['description'] == todo['description']
 
 def test_post_todo_valid_body_with_project_relationship():
@@ -181,7 +181,7 @@ def test_post_todo_valid_body_with_project_relationship():
 
     assert res.status_code == 201
     assert res_body['title'] == todo['title']
-    # assert res_body['doneStatus'] == todo['doneStatus']
+    assert res_body['doneStatus'] == str(todo['doneStatus']).lower()
     assert res_body['description'] == todo['description']
 
     # Assert todo was added to project
@@ -223,7 +223,7 @@ def test_post_todo_valid_body_with_category_relationship():
 
     assert res.status_code == 201
     assert res_body['title'] == todo['title']
-    # assert res_body['doneStatus'] == todo['doneStatus']
+    assert res_body['doneStatus'] == str(todo['doneStatus']).lower()
     assert res_body['description'] == todo['description']
     assert res_body['categories'][0]['id'] == category_id
 

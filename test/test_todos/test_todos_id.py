@@ -36,7 +36,7 @@ def test_get_todo():
     assert len(res_body['todos']) == 1
     assert res_body['todos'][0]['id'] == todo1_id
     assert res_body['todos'][0]['title'] == todo1['title']
-    # assert res_body['todos'][0]['doneStatus'] == todo1['doneStatus']
+    assert res_body['todos'][0]['doneStatus'] == str(todo1['doneStatus']).lower()
     assert res_body['todos'][0]['description'] == todo1['description']
 
 def test_get_todo_xml():
@@ -104,7 +104,7 @@ def test_put_todo_valid_body():
     assert res.status_code == 200
     assert res_body['id'] == todo_id
     assert res_body['title'] == edited_todo['title']
-    # assert res_body['doneStatus'] == todedited_todoo1['doneStatus']
+    assert res_body['doneStatus'] == str(edited_todo['doneStatus']).lower()
     assert res_body['description'] == edited_todo['description']
 
 def test_put_todo_valid_body_xml():
@@ -237,7 +237,7 @@ def test_post_todo_valid_body():
     assert res.status_code == 200
     assert res_body['id'] == todo_id
     assert res_body['title'] == edited_todo['title']
-    # assert res_body['doneStatus'] == todedited_todoo1['doneStatus']
+    assert res_body['doneStatus'] == str(edited_todo['doneStatus']).lower()
     assert res_body['description'] == edited_todo['description']
 
 def test_post_todo_valid_body_xml():
@@ -296,7 +296,7 @@ def test_post_todo_partial_body():
     assert res.status_code == 200
     assert res_body['id'] == todo_id
     assert res_body['title'] == todo['title']
-    # assert res_body['doneStatus'] == todo['doneStatus']
+    assert res_body['doneStatus'] == str(todo['doneStatus']).lower()
     assert res_body['description'] == edited_todo['description']
 
 # Undocumented

@@ -53,8 +53,8 @@ def test_get_todos_projects():
     assert res.status_code == 200
     assert res_body['projects'][0]['id'] == project_id
     assert res_body['projects'][0]['title'] == project['title']
-    # assert res_body['projects'][0]['completed'] == project['completed']
-    # assert res_body['projects'][0]['active'] == project['active']
+    assert res_body['projects'][0]['completed'] == str(project['completed']).lower()
+    assert res_body['projects'][0]['active'] == str(project['active']).lower()
     assert res_body['projects'][0]['description'] == project['description']
     assert res_body['projects'][0]['tasks'][0]['id'] == todo_id
 
