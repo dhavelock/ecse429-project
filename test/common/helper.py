@@ -5,11 +5,25 @@ base_url = 'http://localhost:4567/'
 
 
 def reset_system():
+    headers={'Content-Type': 'application/json'}
+
     res = requests.post(base_url + 'admin/data/thingifier')
     if res.status_code == 200:
-        print("System data successfully cleared")
+        print('System data successfully cleared')
     else:
-        raise Exception("System failed to reset")
+        raise Exception('System failed to reset')
+
+    # Check that no todos, projects, or categories are present
+    res = requests.get(base_url + 'todos', headers)
+    assert len(res.json()['todos']) == 0
+
+    res = requests.get(base_url + 'projects', headers)
+    assert len(res.json()['projects']) == 0
+
+    res = requests.get(base_url + 'categories', headers)
+    assert len(res.json()['categories']) == 0
+
+    print('System is cleared of all todos, projects, and categories')
 
 
 def create_todo(body, headers={'Content-Type': 'application/json'}):
