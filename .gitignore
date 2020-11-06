@@ -2,3 +2,5 @@
 .vscode
 .pytest_cache
 __pycache__/
+behave_log.txt
+todo_manager_log.txt

@@ -2,9 +2,7 @@ import subprocess
 import requests
 import time
 
-def pytest_sessionstart(session):
-
-    server_output_file = 'todo_manager_log.txt'
+def start_server(server_output_file='todo_manager_log.txt'):
 
     with open(server_output_file, "w") as outfile:
         subprocess.Popen(['java', '-jar', 'runTodoManagerRestAPI-1.5.5.jar'], stdout=outfile)
@@ -28,8 +26,14 @@ def pytest_sessionstart(session):
         print('Failed to start up server')
         exit(1)
 
-def pytest_sessionfinish(session, exitstatus):
+def shutdown_server():
     try:
         requests.get('http://localhost:4567/shutdown')
     except requests.exceptions.ConnectionError as e:
         print('\nTodo Manager Shutdown')
+
+def pytest_sessionstart(session):
+    start_server()
+
+def pytest_sessionfinish(session, exitstatus):
+    shutdown_server()
