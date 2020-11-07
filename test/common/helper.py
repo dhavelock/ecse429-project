@@ -74,6 +74,11 @@ def delete_project(project_id):
 
     return res
 
+def delete_todo(todo_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.delete(base_url + 'todos/' + todo_id, headers=headers)
+
+    return res
 
 def get_project(project_id):
     headers = {'Content-Type': 'application/json'}
@@ -94,7 +99,23 @@ def get_todos(params={}):
     res = requests.get(base_url + 'todos', headers=headers, params=params)
 
     return res
+    
+def get_todo(todo_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'todos/' + todo_id, headers=headers)
 
+    return res
+
+def complete_todo(todo_id):
+    headers = {'Content-Type': 'application/json'}
+
+    completed_todo = {
+        'doneStatus': True,
+    }
+
+    res = requests.post(base_url + 'todos/' + todo_id, headers=headers, data=json.dumps(completed_todo))
+    
+    return res
 
 def get_project_tasks(project_id, params={}):
     headers = {'Content-Type': 'application/json'}
