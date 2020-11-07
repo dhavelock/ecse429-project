@@ -68,6 +68,41 @@ def create_category_project_relation(category_id, project_id):
                   headers=headers, data=json.dumps({'id': category_id}))
 
 
+def delete_project(project_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.delete(base_url + 'projects/' + project_id, headers=headers)
+
+    return res
+
+
+def get_project(project_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'projects/' + project_id, headers=headers)
+
+    return res
+
+
+def get_projects(params={}):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'projects', headers=headers, params=params)
+
+    return res
+
+
+def get_todos(params={}):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'todos', headers=headers, params=params)
+
+    return res
+
+
+def get_project_tasks(project_id, params={}):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'projects/' + project_id + '/tasks', headers=headers, params=params)
+
+    return res
+
+
 def print_response(response):
     print('Request:')
     print(response.request.method, response.request.url)
