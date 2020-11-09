@@ -33,7 +33,7 @@ Feature: Categorize tasks
             | Category1     | ecse429   | MEDIUM        |
             | Category1     | ecse429   | LOW           |
 
-    Scenario Outline: Scenario Outline name: No category exists (Failure Flow)
+    Scenario Outline: No category exists (Failure Flow)
 
         Given a todo task exists in the system with title "<todoTitle>"
         When I request to add a "<priorityLevel>" priority cartegorization to the task using an invalid id
