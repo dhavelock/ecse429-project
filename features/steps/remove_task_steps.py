@@ -6,15 +6,19 @@ def step_impl(context, id):
     context.id = id
     context.todo = create_todo(context.id)
 
-@given('the user wants to delete the task with an invalid id')
+@given('a todo does not exist in the system with id "{id}"')
+def step_impl(context, id):
+    context.id = id
+
+@given('I want to delete the task with an invalid id')
 def step_impl(context):
     context.id = '999'
 
-@when('The user requests to delete the task with "{id}"')
+@when('I request to delete the task with "{id}"')
 def step_impl(context, id):
     delete_todo(id)
 
-@when('the user requests to delete the invalid task')
+@when('I request to delete the invalid task')
 def step_impl(context):
     print(context.id)
     context.response = delete_todo(context.id)
@@ -25,6 +29,6 @@ def step_impl(context, id):
     assert len(response.json()['todos']) == 0
     assert response.status_code == 200
 
-@then('the user should see an error message with 404 status code')
+@then('I should see an error message with 404 status code')
 def step_impl(context):
     assert (context.response.status_code) == 404
