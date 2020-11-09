@@ -10,12 +10,12 @@ def step_impl(context):
 
         todo_dict = {'title': todo_table['taskTitle']}
         if 'doneStatus' in todo_table:
-            todo_dict.append({'doneStatus': todo_table['doneStatus'] == 'True'})
+            todo_dict['doneStatus'] = todo_table['doneStatus'] == 'True'
         if 'description' in todo_table:
-            todo_dict.append({'description': todo_table['description']})
+            todo_dict['description'] = todo_table['description']
 
-        context.category_id = get_categories({'title': todo_dict['priorityLevel']}).json()['categories'][0]['id']
-        project_id = create_project({'title': todo_dict['project']})['id']
+        context.category_id = get_categories({'title': todo_table['priorityLevel']}).json()['categories'][0]['id']
+        project_id = create_project({'title': todo_table['project']})['id']
         todo_id = create_todo(todo_dict)['id']
         create_todo_project_relation(todo_id, project_id)
         create_todo_category_relation(todo_id, context.category_id)
@@ -23,12 +23,12 @@ def step_impl(context):
 
 @when('I submit a query for "{priorityLevel}" priority level tasks with a done status of "{doneStatus}"')
 def step_impl(context, priorityLevel, doneStatus):
-    context.response = get_todos({'doneStatus': doneStatus == 'True', 'category': {'id': context.category_id}})
+    context.response = get_todos({'doneStatus': doneStatus.lower(), 'category': {'id': context.category_id}}).json()['todos']
 
 
 @then('the following list "{tasks}" of task titles is returned')
 def step_impl(context, tasks):
-    tasks = tasks.split(',').strip()
+    tasks = [t.strip() for t in tasks.split(',')]
     assert len(context.response) == len(tasks)
     for res in context.response:
         assert res['title'] in tasks
