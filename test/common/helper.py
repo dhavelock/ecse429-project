@@ -5,7 +5,7 @@ base_url = 'http://localhost:4567/'
 
 
 def reset_system():
-    headers={'Content-Type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
 
     res = requests.post(base_url + 'admin/data/thingifier')
     if res.status_code == 200:
@@ -74,11 +74,13 @@ def delete_project(project_id):
 
     return res
 
+
 def delete_todo(todo_id):
     headers = {'Content-Type': 'application/json'}
     res = requests.delete(base_url + 'todos/' + todo_id, headers=headers)
 
     return res
+
 
 def get_project(project_id):
     headers = {'Content-Type': 'application/json'}
@@ -94,17 +96,26 @@ def get_projects(params={}):
     return res
 
 
+def get_categories(params={}):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'categories', headers=headers, params=params)
+
+    return res
+
+
 def get_todos(params={}):
     headers = {'Content-Type': 'application/json'}
     res = requests.get(base_url + 'todos', headers=headers, params=params)
 
     return res
-    
+
+
 def get_todo(todo_id):
     headers = {'Content-Type': 'application/json'}
     res = requests.get(base_url + 'todos/' + todo_id, headers=headers)
 
     return res
+
 
 def complete_todo(todo_id):
     headers = {'Content-Type': 'application/json'}
@@ -114,8 +125,9 @@ def complete_todo(todo_id):
     }
 
     res = requests.post(base_url + 'todos/' + todo_id, headers=headers, data=json.dumps(completed_todo))
-    
+
     return res
+
 
 def get_project_tasks(project_id, params={}):
     headers = {'Content-Type': 'application/json'}

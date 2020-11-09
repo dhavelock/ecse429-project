@@ -1,6 +1,8 @@
 .DS_Store
 .vscode
+.idea
 .pytest_cache
+*.pyc
 __pycache__/
 behave_log.txt
 todo_manager_log.txt
