@@ -23,7 +23,11 @@ def step_impl(context):
 
 @when('I send the request to remove the todo list')
 def step_impl(context):
-    delete_project(context.project['id'])
+    response = delete_project(context.project['id'])
+    try:
+        context.response = response.json()
+    except:
+        context.response = None
 
 @then('The todo list with title "{listTitle}" should not exist')
 def step_impl(context, listTitle):

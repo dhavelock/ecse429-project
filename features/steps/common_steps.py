@@ -17,6 +17,6 @@ def step_impl(context, field, value):
 
     assert context.response[field] == value
 
-@then('the response should have the error message: "{error_message}"')
+@then('The response should have the error message: "{error_message}"')
 def step_impl(context, error_message):
     assert context.response['errorMessages'][0] == error_message

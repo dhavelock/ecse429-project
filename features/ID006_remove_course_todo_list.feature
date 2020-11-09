@@ -30,3 +30,13 @@ And The todos should have no project relations
 Examples: Todo List Data
     | listTitle |
     | ecse429   |
+
+Scenario Outline: Remove to do list that does not exist (Error Flow)
+
+Given I do not have an existing todo list with id "<id>"
+When I send the request to remove the todo list
+Then The response should have the error message: "Could not find any instances with projects/<id>"
+
+Examples: Todo List Data
+    | listTitle | id |
+    | ecse429   | 12 |
