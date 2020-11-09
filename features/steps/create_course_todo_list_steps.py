@@ -13,6 +13,10 @@ def step_impl(context):
 def step_impl(context, description):
     context.description = description
 
+@given('I set the id to "{id}"')
+def step_impl(context, id):
+    context.id = id
+
 @when('I send the request to create the todo list')
 def step_impl(context):
 
@@ -23,6 +27,9 @@ def step_impl(context):
 
     if 'description' in context:
         body['description'] = context.description
+
+    if 'id' in context:
+        body['id'] = context.id
 
     context.response = create_project(body)
 
