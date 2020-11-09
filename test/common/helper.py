@@ -82,6 +82,13 @@ def delete_todo(todo_id):
     return res
 
 
+def delete_category(category_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.delete(base_url + 'categories/' + category_id, headers=headers)
+
+    return res
+
+
 def get_project(project_id):
     headers = {'Content-Type': 'application/json'}
     res = requests.get(base_url + 'projects/' + project_id, headers=headers)
@@ -99,6 +106,13 @@ def get_projects(params={}):
 def get_categories(params={}):
     headers = {'Content-Type': 'application/json'}
     res = requests.get(base_url + 'categories', headers=headers, params=params)
+
+    return res
+
+
+def get_category_todos(category_id, params={}):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.get(base_url + 'categories/' + category_id + '/todos', headers=headers, params=params)
 
     return res
 

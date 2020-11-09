@@ -16,14 +16,14 @@ Feature: Query incomplete HIGH priority tasks from a list
       | interview      | ecse123 | MEDIUM        | False      |
       | class work     | ecse213 | HIGH          | False      |
       | project part 2 | ecse321 | MEDIUM        | False      |
-      | take-home      | ecse999| HIGH          | False      |
+      | take-home      | ecse999 | HIGH          | False      |
       | assignment     | ecse429 | LOW           | True       |
 
     When I submit a query for "<priorityLevel>" priority level tasks with a done status of "<doneStatus>"
     Then the following list "<tasks>" of task titles is returned
 
     Examples: Todo List Data
-      | doneStatus | priorityLevel | tasks                       |
+      | doneStatus | priorityLevel | tasks                      |
       | False      | HIGH          | class work,  take-home     |
       | False      | MEDIUM        | interview,  project part 2 |
 
@@ -45,10 +45,13 @@ Feature: Query incomplete HIGH priority tasks from a list
 
   Scenario Outline: Query incomplete HIGH priority tasks, but priority category does not exist (Error Flow)
 
+    Given the following tasks exist
+      | project | taskTitle      | priorityLevel | doneStatus |
+      | ecse429 | project part 1 | HIGH          | False      |
     Given the priority category "<priorityLevel>" has been deleted
     When I submit a query for "<priorityLevel>" priority level tasks with a done status of "<doneStatus>"
-    Then I receive a status code "<statusCode>"
+    Then I receive an empty list
 
     Examples: Todo List Data
-      | doneStatus | priorityLevel | statusCode |
-      | False      | HIGH          | 404        |
+      | doneStatus | priorityLevel |
+      | False      | HIGH          |
