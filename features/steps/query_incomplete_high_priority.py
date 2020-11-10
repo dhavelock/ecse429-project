@@ -14,11 +14,16 @@ def step_impl(context):
         if 'description' in todo_table:
             todo_dict['description'] = todo_table['description']
 
-        category_id = get_categories({'title': todo_table['priorityLevel']}).json()['categories'][0]['id']
-        project_id = create_project({'title': todo_table['project']})['id']
         todo_id = create_todo(todo_dict)['id']
-        create_todo_project_relation(todo_id, project_id)
-        create_todo_category_relation(todo_id, category_id)
+
+        if 'priorityLevel' in todo_table:
+            category_id = get_categories({'title': todo_table['priorityLevel']}).json()['categories'][0]['id']
+            create_todo_category_relation(todo_id, category_id)
+        if 'project' in todo_table:
+            project_id = create_project({'title': todo_table['project']})['id']
+            create_todo_project_relation(todo_id, project_id)
+
+
 
 
 @when('I submit a query for "{priorityLevel}" priority level tasks with a done status of "{doneStatus}"')
@@ -53,5 +58,4 @@ def step_impl(context, statusCode):
 @given('the priority category "{priorityLevel}" has been deleted')
 def step_impl(context, priorityLevel):
     context.cat_id = get_categories({'title': priorityLevel}).json()['categories'][0]['id']
-    res = delete_category(context.cat_id).status_code
-    x=2
+    delete_category(context.cat_id).status_code

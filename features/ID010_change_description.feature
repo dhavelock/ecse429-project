@@ -3,7 +3,11 @@ Feature: Change Task Description
   As a student, I want to change a task description, to better represent the work to do.
 
   Background:
-#    Given application is running
+     Given the following tasks exist
+      | taskTitle      | project | doneStatus |
+      | project part 1 | ecse111 | True       |
+      | interview      | ecse123 | False      |
+      | class work     | ecse213 | False      |
 
   Scenario Outline: Change description of a task (Normal Flow)
     Given a todo task exists in the system with title "<taskTitle>"
@@ -46,4 +50,4 @@ Feature: Change Task Description
 
     Examples:
       | newDescription | taskTitle | statusCode |
-      | assignment 2   | interview | 400        |
+      | assignment 2   | interview | 404        |
