@@ -17,7 +17,7 @@ def step_impl(context, taskTitle, oldPriority):
 def step_impl(context, taskTitle, oldPriority, newPriority):
     category_id = get_categories({'title': newPriority}).json()['categories'][0]['id']
     old_id = get_categories({'title': oldPriority}).json()['categories'][0]['id']
-    delete_todo_category_link(context.todo_id, old_id)
+    context.code = delete_todo_category_link(context.todo_id, old_id).status_code
     create_todo_category_relation(context.todo_id, category_id)
 
 

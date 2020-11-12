@@ -36,9 +36,10 @@ Feature: Change the priority of a task
 
     Given a task with title "<taskTitle>" does not exist
     When I adjust the task "<taskTitle>" from "<oldPriority>" priority to "<newPriority>" priority
-    Then the "<oldPriority>" priority category should not contain the task "<taskTitle>"
+    Then I receive a status code "<statusCode>"
     And the "<newPriority>" priority category should not contain the task "<taskTitle>"
+    And the "<oldPriority>" priority category should not contain the task "<taskTitle>"
 
     Examples:
-      | oldPriority | newPriority | taskTitle    |
-      | LOW         | HIGH        | interview    |
+      | oldPriority | newPriority | taskTitle    | statusCode |
+      | LOW         | HIGH        | interview    | 404        |

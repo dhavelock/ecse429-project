@@ -51,7 +51,8 @@ Feature: Query incomplete HIGH priority tasks from a list
     Given the priority category "<priorityLevel>" has been deleted
     When I submit a query for "<priorityLevel>" priority level tasks with a done status of "<doneStatus>"
     Then I receive an empty list
+    And I receive a status code "<statusCode>"
 
     Examples: Todo List Data
-      | doneStatus | priorityLevel |
-      | False      | HIGH          |
+      | doneStatus | priorityLevel | statusCode | 
+      | False      | HIGH          | 200        | 
