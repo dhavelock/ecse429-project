@@ -23,7 +23,7 @@ def step_impl(context, taskTitle, newDescription):
     assert get_todo(context.todo_id).json()['todos'][0]['description'] == newDescription
 
 
-@step('the todo task with title "(?P<taskTitle>.+)" has no description')
+@given('the todo task with title "(?P<taskTitle>.+)" has no description')
 def step_impl(context, taskTitle):
     all_todos = get_todos().json()['todos']
     todo_id = [t['id'] for t in all_todos if t['title'] == taskTitle][0]
@@ -34,3 +34,8 @@ def step_impl(context, taskTitle):
 @when('I remove the description of the task "(?P<taskTitle>.+)"')
 def step_impl(context, taskTitle):
     update_todo(context.todo_id, {'description': ""})
+
+
+@then('the todo task with title "(?P<taskTitle>.+)" has no description')
+def step_impl(context, taskTitle):
+    assert len(get_todo(context.todo_id).json()['todos'][0]['description']) == 0
