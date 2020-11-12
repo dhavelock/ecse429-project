@@ -4,23 +4,37 @@ As a student
 I remove an unnecessary task from my course to do list
 So I can forget about it
 
-Scenario Outline: Delete Todo (Normal Flow)
+Scenario Outline: Delete Task from Todo List (Normal Flow)
 
-Given a todo task exists with id "<id>"
-When I request to delete the task with "<id>" 
-Then the todo task with id "<id>" should not exist with a response 200 status code
+Given I have a todo list with title "<listTitle>"
+And the todo list has a task with title "<taskTitle>"
+When I request to delete the task with "<taskTitle>" from the todo list
+Then the todo task with taskTitle "<taskTitle>" should not exist on the todo list
 
 Examples: Todo List Data
-    | id |
-    | 1  |
+    | listTitle | taskTitle | 
+    | ecse429   | homework  |
+
+Scenario Outline: Delete Task (Alternate Flow)
+
+Given I have a todo list with title "<listTitle>"
+And the todo list has a task with title "<taskTitle>"
+When I request to delete the task with "<taskTitle>" from the system
+Then the task will be deleted from the system
+And the todo task with taskTitle "<taskTitle>" should not exist on the todo list
+
+Examples: Todo List Data
+    | listTitle | taskTitle | 
+    | ecse429   | homework  |
 
 Scenario Outline: Delete Todo (Failure Flow)
 
-Given a todo does not exist in the system with id "<id>" 
-And I want to delete the task with an invalid id
+Given I have a todo list with title "<listTitle>"
+And the todo list does not have a task with title "<taskTitle>"
+And I want to delete the invalid task with "<taskTitle>" from the todo list
 When I request to delete the invalid task
 Then I should see an error message with 404 status code
 
 Examples: Todo List Data
-    | id |
-    | 999  |
+    | listTitle | taskTitle |
+    | ecse429   | homework  |

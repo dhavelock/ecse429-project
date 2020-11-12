@@ -6,33 +6,34 @@ So I can track my accomplishments
 
 Scenario Outline: Mark Task as Done (Normal Flow)
 
-Given a todo task exists in the system with id "<id>" 
-And the task has a incomplete done status of "<doneStatus>"
+Given a todo list exists in the system with title "<listTitle>" 
+And the list has a task with the title "<taskTitle>" and a False done status
 When I request to complete the task
-Then the todo task with id "<id>" should be completed
+Then the todo task with should be completed
 
 Examples: Todo Data
-    | id | doneStatus |
-    | 1  | False |
+    | listTitle | taskTitle |
+    | ecse429 | homework    |
 
 Scenario Outline: Mark Completed Task as Done (Alternate Flow)
 
-Given a todo task exists in the system with id "<id>" 
-And the task has a complete done status of "<doneStatus>"
+Given a todo list exists in the system with title "<listTitle>" 
+And the list has a task with the title "<taskTitle>" and a True done status
 When I request to complete the task
-Then the todo task with id "<id>" should be completed
+Then the todo task with should be completed
 
 Examples: Todo Data
-    | id | doneStatus |
-    | 1  | True |
+    | listTitle | taskTitle |
+    | ecse429 | homework    |
 
 Scenario Outline: Mark Invalid Task as Done (Failure Flow)
 
-Given a todo task does not exist in the system with id "<id>" 
-And I request to edit an invalid task id in the system
-When I request to complete the task
-Then the todo task with invalid "<id>" should not be completed with error message 404
+Given a todo list exists in the system with title "<listTitle>" 
+And the list has a task with the title "<taskTitle>" and a False done status
+When I request to complete the task with an invalid done status of "<newDoneStatus>"
+Then I receive a status code of 400
+And the done status of the todo task with "<taskTitle>" will not be changed
 
 Examples: Todo Data
-    | id |
-    | 999  |
+    | listTitle | taskTitle | newDoneStatus |
+    | ecse429 | homework    | invalidDoneStatus |
