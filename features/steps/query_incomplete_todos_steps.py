@@ -1,5 +1,5 @@
 from behave import *
-from test.common.helper import get_project_tasks, print_response
+from test.common.helper import get_project_tasks, print_response, get_projects
 
 @given('I do not have an existing todo list with id "{id}"')
 def step_impl(context, id):
@@ -8,9 +8,15 @@ def step_impl(context, id):
         'id': id
     }
 
+@when('I query the projects with list name "{listTitle}"')
+def step_impl(context, listTitle):
+    projects = get_projects({'title': listTitle}).json()['projects']
+    context.project = projects[0]
+
 @when('I submit the query for incomplete todo items')
 def step_impl(context):
     response = get_project_tasks(context.project['id'], {'doneStatus': 'false'})
+    context.response = response
     try:
         context.incomplete_tasks = response.json()['todos']
     except:
