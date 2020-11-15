@@ -38,6 +38,7 @@ Feature: Categorize tasks
         Given a todo task exists in the system with title "<todoTitle>"
         When I request to add a "<priorityLevel>" priority cartegorization to the task using an invalid id
         Then the todo task should not have any category relations
+        And the response should have the error message: "Could not find thing matching value for id"
 
         Examples: Todo Title
             | todoTitle | priorityLevel |

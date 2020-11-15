@@ -47,6 +47,7 @@ Feature: Add task to course to do list
         Given I have an existing to do list with title "<listTitle>"
         When I request to add an invalid task to the to do list
         Then the to do list with title "<listTitle>" should not include any tasks
+        And the response should have the error message: "Could not find thing matching value for id"
 
         Examples: Todo List Data
             | listTitle |

@@ -1,5 +1,7 @@
 from behave import *
-from test.common.helper import create_project, create_category, delete_project, get_projects, create_todo, create_todo_project_relation, get_todos, delete_todo, complete_todo, get_todo, create_todo_category_relation
+import requests
+import json
+from test.common.helper import create_project, create_category, delete_project, get_projects, create_todo, create_todo_project_relation, get_todos, delete_todo, complete_todo, get_todo, create_todo_category_relation, create_todo_category_half_relation
 
 
 @given('a todo task exists in the system with title "{todoTitle}"')
@@ -31,7 +33,8 @@ def step_impl(context, priorityLevel):
 
 @when('I request to add a "{priorityLevel}" priority cartegorization to the task using an invalid id')
 def step_impl(context, priorityLevel):
-    create_todo_category_relation(context.todo['id'], '999')
+    response = create_todo_category_half_relation(context.todo['id'], '999')
+    context.response = response.json()
 
 
 @then('the todo task with title "{todoTitle}" should have the "{priorityLevel}" priority categorization')

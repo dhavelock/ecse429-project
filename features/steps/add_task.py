@@ -1,5 +1,5 @@
 from behave import *
-from test.common.helper import create_project, create_category, delete_project, get_projects, create_todo, create_todo_project_relation, get_todos, delete_todo, complete_todo, get_todo, create_todo_category_relation, get_project
+from test.common.helper import create_project, create_category, delete_project, get_projects, create_todo, create_todo_project_relation, get_todos, delete_todo, complete_todo, get_todo, create_todo_category_relation, get_project, create_todo_project_half_relation
 
 
 @given('I have an existing to do list with title "{listTitle}"')
@@ -45,7 +45,8 @@ def step_impl(context):
 
 @when('I request to add an invalid task to the to do list')
 def step_impl(context):
-    create_todo_project_relation('999', context.project['id'])
+    response = create_todo_project_half_relation('999', context.project['id'])
+    context.response = response.json()
 
 
 @then('the to do list with title "{listTitle}" should include the task with title "{taskTitle}"')

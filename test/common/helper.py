@@ -52,12 +52,28 @@ def create_todo_category_relation(todo_id, category_id):
                   '/todos', headers=headers, data=json.dumps({'id': todo_id}))
 
 
+def create_todo_category_half_relation(todo_id, category_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.post(base_url + 'todos/' + str(todo_id) + '/categories',
+                        headers=headers, data=json.dumps({'id': category_id}))
+
+    return res
+
+
 def create_todo_project_relation(todo_id, project_id):
     headers = {'Content-Type': 'application/json'}
     requests.post(base_url + 'todos/' + str(todo_id) + '/tasksof',
                   headers=headers, data=json.dumps({'id': project_id}))
     requests.post(base_url + 'projects/' + str(project_id) +
                   '/tasks', headers=headers, data=json.dumps({'id': todo_id}))
+
+
+def create_todo_project_half_relation(todo_id, project_id):
+    headers = {'Content-Type': 'application/json'}
+    res = requests.post(base_url + 'projects/' + str(project_id) +
+                        '/tasks', headers=headers, data=json.dumps({'id': todo_id}))
+
+    return res
 
 
 def create_category_project_relation(category_id, project_id):
@@ -84,14 +100,16 @@ def delete_todo(todo_id):
 
 def delete_category(category_id):
     headers = {'Content-Type': 'application/json'}
-    res = requests.delete(base_url + 'categories/' + category_id, headers=headers)
+    res = requests.delete(base_url + 'categories/' +
+                          category_id, headers=headers)
 
     return res
 
 
 def delete_todo_category_link(todo_id, category_id):
     headers = {'Content-Type': 'application/json'}
-    res = requests.delete(base_url + 'categories/' + category_id + '/todos/' + todo_id, headers=headers)
+    res = requests.delete(base_url + 'categories/' +
+                          category_id + '/todos/' + todo_id, headers=headers)
 
     return res
 
@@ -109,11 +127,14 @@ def get_projects(params={}):
 
     return res
 
+
 def delete_project_todo(project_id, todo_id):
     headers = {'Content-Type': 'application/json'}
-    res = requests.delete(base_url + 'projects/' + project_id + '/tasks/' + todo_id, headers=headers)
+    res = requests.delete(base_url + 'projects/' +
+                          project_id + '/tasks/' + todo_id, headers=headers)
 
     return res
+
 
 def get_categories(params={}):
     headers = {'Content-Type': 'application/json'}
@@ -124,13 +145,16 @@ def get_categories(params={}):
 
 def get_category_todos(category_id, params={}):
     headers = {'Content-Type': 'application/json'}
-    res = requests.get(base_url + 'categories/' + category_id + '/todos', headers=headers, params=params)
+    res = requests.get(base_url + 'categories/' + category_id +
+                       '/todos', headers=headers, params=params)
 
     return res
 
+
 def get_project_todos(project_id):
     headers = {'Content-Type': 'application/json'}
-    res = requests.get(base_url + 'projects/' + project_id + '/tasks', headers=headers)
+    res = requests.get(base_url + 'projects/' +
+                       project_id + '/tasks', headers=headers)
 
     return res
 
@@ -152,7 +176,8 @@ def get_todo(todo_id):
 def update_todo(todo_id, data={}):
     headers = {'Content-Type': 'application/json'}
 
-    res = requests.post(base_url + 'todos/' + todo_id, headers=headers, data=json.dumps(data))
+    res = requests.post(base_url + 'todos/' + todo_id,
+                        headers=headers, data=json.dumps(data))
 
     return res
 
@@ -164,9 +189,11 @@ def complete_todo(todo_id):
         'doneStatus': True,
     }
 
-    res = requests.post(base_url + 'todos/' + todo_id, headers=headers, data=json.dumps(completed_todo))
+    res = requests.post(base_url + 'todos/' + todo_id,
+                        headers=headers, data=json.dumps(completed_todo))
 
     return res
+
 
 def edit_todo_done_status(todo_id, doneStatus):
     headers = {'Content-Type': 'application/json'}
@@ -175,13 +202,16 @@ def edit_todo_done_status(todo_id, doneStatus):
         'doneStatus': doneStatus,
     }
 
-    res = requests.post(base_url + 'todos/' + todo_id, headers=headers, data=json.dumps(completed_todo))
+    res = requests.post(base_url + 'todos/' + todo_id,
+                        headers=headers, data=json.dumps(completed_todo))
 
     return res
 
+
 def get_project_tasks(project_id, params={}):
     headers = {'Content-Type': 'application/json'}
-    res = requests.get(base_url + 'projects/' + project_id + '/tasks', headers=headers, params=params)
+    res = requests.get(base_url + 'projects/' + project_id +
+                       '/tasks', headers=headers, params=params)
 
     return res
 
