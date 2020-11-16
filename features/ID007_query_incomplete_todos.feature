@@ -37,8 +37,12 @@ Examples: Todo List Data
     | listTitle |
     | ecse429   |
 
-Scenario: Query incomplete todo items given list does not exist (Error Flow)
+Scenario Outline: Query incomplete todo items given list does not exist (Error Flow)
 
-Given I do not have an existing todo list with id "123"
+Given I do not have an existing todo list with id "<listTitle>"
 When I submit the query for incomplete todo items
 Then The response should have an error message
+
+Examples: Todo List IDs
+    | listTitle |
+    | ecse429   |
