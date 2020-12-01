@@ -13,8 +13,6 @@ def url(todo_id, category_id):
 def setup_function(function):
     reset_system()
 
-def teardown_function(function):
-    pass
 
 def test_get_todo_category_not_allowed():
 

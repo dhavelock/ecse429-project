@@ -13,8 +13,6 @@ def url(id):
 def setup_function(function):
     reset_system()
 
-def teardown_function(function):
-    pass
 
 def test_get_todos_projects():
 

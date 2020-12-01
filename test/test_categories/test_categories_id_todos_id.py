@@ -12,10 +12,6 @@ def setup_function(function):
     reset_system()
 
 
-def teardown_function(function):
-    pass
-
-
 def test_get_category_id_todos_id_not_allowed():
 
     # Given

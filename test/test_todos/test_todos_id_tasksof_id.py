@@ -13,8 +13,6 @@ def url(todo_id, project_id):
 def setup_function(function):
     reset_system()
 
-def teardown_function(function):
-    pass
 
 def test_get_todo_project_not_allowed():
 

@@ -9,8 +9,6 @@ url = 'http://localhost:4567/todos/'
 def setup_function(function):
     reset_system()
 
-def teardown_function(function):
-    pass
 
 def test_get_todo():
 

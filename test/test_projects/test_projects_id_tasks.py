@@ -10,8 +10,6 @@ headers = {'Content-Type': 'application/json' }
 def setup_function(function):
     reset_system()
 
-def teardown_function(function):
-    pass
 
 def test_get_project_empty_tasks():
 

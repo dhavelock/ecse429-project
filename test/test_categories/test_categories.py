@@ -13,8 +13,6 @@ def setup_function(function):
     headers = {'Content-Type': 'application/json'}
 
 
-def teardown_function(function):
-    pass
 
 
 def test_get_empty_response():

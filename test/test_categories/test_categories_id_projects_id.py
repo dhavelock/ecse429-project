@@ -16,10 +16,6 @@ def setup_function(function):
     reset_system()
 
 
-def teardown_function(function):
-    pass
-
-
 def test_get_category_project_not_allowed():
 
     # Given
