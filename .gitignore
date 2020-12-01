@@ -7,4 +7,3 @@ __pycache__/
 behave_log.txt
 todo_manager_log.txt
 prof/
-pstats_out.txt

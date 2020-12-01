@@ -206,7 +206,7 @@ def test_put_todo_does_not_exist():
     assert res.status_code == 404
     assert res_body['errorMessages'][0] == 'Invalid GUID for ' + invalid_id + ' entity todo'
 
-def test_post_todo_valid_body():
+def test_post_todo_id_valid_body():
 
     # Given
     headers = {'Content-Type': 'application/json' }
@@ -238,7 +238,7 @@ def test_post_todo_valid_body():
     assert res_body['doneStatus'] == str(edited_todo['doneStatus']).lower()
     assert res_body['description'] == edited_todo['description']
 
-def test_post_todo_valid_body_xml():
+def test_post_todo_id_valid_body_xml():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}

@@ -13,7 +13,7 @@ def setup_function(function):
     headers = {'Content-Type': 'application/json'} 
 
 
-def test_get_empty_response():
+def test_get_empty_response_todos():
 
     # Given
     headers = {'Content-Type': 'application/json' } 
@@ -28,7 +28,7 @@ def test_get_empty_response():
     assert res.status_code == 200
     assert len(res_body['todos']) == 0
 
-def test_get_empty_response_xml():
+def test_get_empty_response_xml_todos():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
@@ -42,7 +42,7 @@ def test_get_empty_response_xml():
 
     assert res.status_code == 200
 
-def test_get_non_empty_response():
+def test_get_non_empty_response_todos():
 
     # Given
     headers = {'Content-Type': 'application/json' } 
@@ -83,7 +83,7 @@ def test_get_non_empty_response():
     assert res_todo2['doneStatus'] == str(todo2['doneStatus']).lower()
     assert res_todo2['description'] == todo2['description']
 
-def test_get_non_empty_response_xml():
+def test_get_non_empty_response_xml_todos():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
@@ -112,7 +112,7 @@ def test_get_non_empty_response_xml():
 
     assert res.status_code == 200
 
-def test_put_not_allowed():
+def test_put_not_allowed_todos():
 
     # When
     res = requests.put(url, headers={'Content-Type': 'application/json'} )
@@ -270,7 +270,7 @@ def test_post_todo_invalid_body():
 
     assert res.status_code == 400
 
-def test_delete_not_allowed():
+def test_delete_not_allowed_todos():
 
     # When
     res = requests.delete(url, headers={'Content-Type': 'application/json' } )
@@ -280,7 +280,7 @@ def test_delete_not_allowed():
 
     assert res.status_code == 405
 
-def test_options_ok():
+def test_options_ok_todos():
 
     # When
     res = requests.options(url, headers={'Content-Type': 'application/json' } )
@@ -290,7 +290,7 @@ def test_options_ok():
 
     assert res.status_code == 200
 
-def test_head_ok():
+def test_head_ok_todos():
 
     # When
     res = requests.head(url, headers={'Content-Type': 'application/json' } )
@@ -300,7 +300,7 @@ def test_head_ok():
 
     assert res.status_code == 200
 
-def test_patch_not_allowed():
+def test_patch_not_allowed_todos():
 
     # When
     res = requests.patch(url, headers={'Content-Type': 'application/json' } )

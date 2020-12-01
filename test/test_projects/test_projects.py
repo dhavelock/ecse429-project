@@ -12,7 +12,7 @@ def setup_function(function):
     reset_system()
 
 
-def test_get_empty_response():
+def test_get_empty_response_projects():
 
     # When
     res = requests.get(url, headers=headers)
@@ -24,7 +24,7 @@ def test_get_empty_response():
     assert res.status_code == 200
     assert len(res_body['projects']) == 0
 
-def test_get_empty_response_xml():
+def test_get_empty_response_xml_projects():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
@@ -38,7 +38,7 @@ def test_get_empty_response_xml():
 
     assert res.status_code == 200
 
-def test_get_non_empty_response():
+def test_get_non_empty_response_projects():
 
     # Given
     project1 = {
@@ -77,7 +77,7 @@ def test_get_non_empty_response():
     assert res_project2['title'] == project2['title']
     assert res_project2['description'] == project2['description']
 
-def test_get_non_empty_response_xml():
+def test_get_non_empty_response_xml_projects():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml' } 
@@ -258,7 +258,7 @@ def test_post_project_invalid_body():
 
     assert res.status_code == 400
 
-def test_delete_not_allowed():
+def test_delete_not_allowed_projects():
 
     # When
     res = requests.delete(url, headers=headers)
@@ -268,7 +268,7 @@ def test_delete_not_allowed():
 
     assert res.status_code == 405
 
-def test_options_ok():
+def test_options_ok_projects():
 
     # When
     res = requests.options(url, headers=headers)
@@ -278,7 +278,7 @@ def test_options_ok():
 
     assert res.status_code == 200
 
-def test_head_ok():
+def test_head_ok_projects():
 
     # When
     res = requests.head(url, headers=headers)
@@ -288,7 +288,7 @@ def test_head_ok():
 
     assert res.status_code == 200
 
-def test_patch_not_allowed():
+def test_patch_not_allowed_projects():
 
     # When
     res = requests.patch(url, headers=headers)

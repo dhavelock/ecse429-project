@@ -372,7 +372,7 @@ def test_head_invalid_project():
 
     assert res.status_code == 404
 
-def test_patch_not_allowed():
+def test_patch_not_allowed_projects_id():
 
     # Given
     project = {

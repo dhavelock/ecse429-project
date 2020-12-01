@@ -15,7 +15,7 @@ def setup_function(function):
 
 
 
-def test_get_empty_response():
+def test_get_empty_response_categories():
 
     # Given
     headers = {'Content-Type': 'application/json'}
@@ -31,7 +31,7 @@ def test_get_empty_response():
     assert len(res_body['categories']) == 0
 
 
-def test_get_empty_response_xml():
+def test_get_empty_response_xml_categories():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
@@ -46,7 +46,7 @@ def test_get_empty_response_xml():
     assert res.status_code == 200
 
 
-def test_get_non_empty_response():
+def test_get_non_empty_response_categories():
 
     # Given
     headers = {'Content-Type': 'application/json'}
@@ -86,7 +86,7 @@ def test_get_non_empty_response():
     assert res_category2['description'] == category2['description']
 
 
-def test_get_non_empty_response_xml():
+def test_get_non_empty_response_xml_categories():
 
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
 
@@ -114,7 +114,7 @@ def test_get_non_empty_response_xml():
     assert res.status_code == 200
 
 
-def test_put_not_allowed():
+def test_put_not_allowed_categories():
 
     # When
     res = requests.put(url, headers={'Content-Type': 'application/json'})
@@ -230,7 +230,7 @@ def test_post_category_valid_body_with_project_relation():
     assert updated_project_body['projects'][0]['categories'][0]['id'] == res_body['id']
 
 
-def test_post_category_valid_body_xml():
+def test_post_category_valid_body_xml_categories():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
@@ -268,7 +268,7 @@ def test_post_category_invalid_body():
     assert res.status_code == 400
 
 
-def test_delete_not_allowed():
+def test_delete_not_allowed_categories():
 
     # When
     res = requests.delete(url, headers={'Content-Type': 'application/json'})
@@ -279,7 +279,7 @@ def test_delete_not_allowed():
     assert res.status_code == 405
 
 
-def test_options_ok():
+def test_options_ok_categories():
 
     # When
     res = requests.options(url, headers={'Content-Type': 'application/json'})
@@ -290,7 +290,7 @@ def test_options_ok():
     assert res.status_code == 200
 
 
-def test_head_ok():
+def test_head_ok_categories():
 
     # When
     res = requests.head(url, headers={'Content-Type': 'application/json'})
@@ -301,7 +301,7 @@ def test_head_ok():
     assert res.status_code == 200
 
 
-def test_patch_not_allowed():
+def test_patch_not_allowed_categories():
 
     # When
     res = requests.patch(url, headers={'Content-Type': 'application/json'})

@@ -215,7 +215,7 @@ def test_put_category_does_not_exist():
         invalid_id + ' entity category'
 
 
-def test_post_category_valid_body():
+def test_post_category_id_valid_body():
 
     # Given
     headers = {'Content-Type': 'application/json'}
@@ -246,7 +246,7 @@ def test_post_category_valid_body():
     assert res_body['description'] == edited_category['description']
 
 
-def test_post_category_valid_body_xml():
+def test_post_category_valid_body_xml_categories_id():
 
     # Given
     headers = {'Content-Type': 'application/json', 'Accept': 'application/xml'}
