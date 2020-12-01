@@ -181,6 +181,21 @@ def update_todo(todo_id, data={}):
 
     return res
 
+def update_project(project_id, data={}):
+    headers = {'Content-Type': 'application/json'}
+
+    res = requests.post(base_url + 'projects/' + project_id,
+                        headers=headers, data=json.dumps(data))
+
+    return res
+
+def update_category(category_id, data={}):
+    headers = {'Content-Type': 'application/json'}
+
+    res = requests.post(base_url + 'categories/' + category_id,
+                        headers=headers, data=json.dumps(data))
+
+    return res
 
 def complete_todo(todo_id):
     headers = {'Content-Type': 'application/json'}
