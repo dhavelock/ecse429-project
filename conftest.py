@@ -1,6 +1,8 @@
 import subprocess
 import requests
 import time
+import os
+import glob
 
 def start_server(server_output_file='todo_manager_log.txt'):
 
@@ -33,6 +35,10 @@ def shutdown_server():
         print('\nTodo Manager Shutdown')
 
 def pytest_sessionstart(session):
+    files = glob.glob('./perf_logs/*')
+    for f in files:
+        os.remove(f)
+
     start_server()
 
 def pytest_sessionfinish(session, exitstatus):
