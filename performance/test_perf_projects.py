@@ -51,7 +51,7 @@ def test_add_project(num):
     t2 = t_end_call - t_start_call
 
     f = open("perf_logs/add_project_performance_test.csv", "a")
-    f.write(str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
+    f.write(str(datetime.now().isoformat()) + ',' + str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
     f.close()
 
 
@@ -97,7 +97,7 @@ def test_delete_project(num):
     t2 = t_end_call - t_start_call
 
     f = open("perf_logs/delete_project_performance_test.csv", "a")
-    f.write(str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
+    f.write(str(datetime.now().isoformat()) + ',' + str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
     f.close()
 
 
@@ -150,5 +150,5 @@ def test_modify_project(num):
     t2 = t_end_call - t_start_call
 
     f = open("perf_logs/modify_project_performance_test.csv", "a")
-    f.write(str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
+    f.write(str(datetime.now().isoformat()) + ',' + str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
     f.close()

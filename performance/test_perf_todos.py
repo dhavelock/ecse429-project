@@ -54,7 +54,7 @@ def test_add_todo(num):
     t2 = t_end_call - t_start_call
 
     f = open("perf_logs/add_todo_performance_test.csv", "a")
-    f.write(str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
+    f.write(str(datetime.now().isoformat()) + ',' + str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
     f.close()
 
 
@@ -95,7 +95,7 @@ def test_delete_todo(num):
     t2 = t_end_call - t_start_call
 
     f = open("perf_logs/delete_todo_performance_test.csv", "a")
-    f.write(str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
+    f.write(str(datetime.now().isoformat()) + ',' + str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
     f.close()
 
 @pytest.mark.parametrize("num", num_todos)
@@ -148,5 +148,5 @@ def test_put_todo_valid_body(num):
     t2 = t_end_call - t_start_call
 
     f = open("perf_logs/modify_todo_performance_test.csv", "a")
-    f.write(str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
+    f.write(str(datetime.now().isoformat()) + ',' + str(num) + ',' + str(t1) + ',' + str(t2) + '\n')
     f.close()
